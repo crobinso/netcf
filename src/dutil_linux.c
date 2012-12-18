@@ -611,12 +611,10 @@ int netlink_init(struct netcf *ncf) {
     ncf->driver->link_cache = __rtnl_link_alloc_cache(ncf->driver->nl_sock);
     if (ncf->driver->link_cache == NULL)
         goto error;
-    nl_cache_mngt_provide(ncf->driver->link_cache);
 
     ncf->driver->addr_cache = __rtnl_addr_alloc_cache(ncf->driver->nl_sock);
     if (ncf->driver->addr_cache == NULL)
         goto error;
-    nl_cache_mngt_provide(ncf->driver->addr_cache);
 
     int netlink_fd = nl_socket_get_fd(ncf->driver->nl_sock);
     if (netlink_fd >= 0)
