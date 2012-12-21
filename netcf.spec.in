@@ -97,6 +97,17 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pkgconfig/netcf.pc
 
 %changelog
+* Fri Dec 21 2012 Laine Stump <laine@redhat.com> - 0.2.3-1
+- eliminate calls to nl_cache_mngt_provide(), to avoid
+  non-threadsafe code in libnl (and because it isn't needed
+  anyway) (This non-threadsafe code could lead to a segfault)
+- portability fixes for FreeBSD
+- fix bug when a config file has two config parameters with
+  identical names
+- add HACKING document
+- always bail immediately if get_augeas fails (doing otherwise
+  could lead to a segfault)
+
 * Sat Aug 25 2012 Laine Stump <laine@redhat.com> - 0.2.2-1
 - specfile: require libnl3-devel for rpm builds on Fedora 18+ and
   RHEL7+. Likewise, force libnl1 for F17- and RHEL6.x-, even if
