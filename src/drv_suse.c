@@ -1,8 +1,8 @@
 /*
- * drv_suse.c: the suse backend for suse
+ * drv_suse.c: the suse backend for netcf
  *
  * Copyright (C) 2010 Novell Inc.
- * Copyright (C) 2009-2012 Red Hat Inc.
+ * Copyright (C) 2009-2013 Red Hat Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -1164,6 +1164,7 @@ int drv_if_up(struct netcf_if *nif) {
     char **slaves = NULL;
     int nslaves = 0;
     int result = -1;
+    int is_active, retries;
 
     if (is_bridge(ncf, nif->name)) {
         /* Bring up bridge slaves before the bridge */
@@ -1177,7 +1178,13 @@ int drv_if_up(struct netcf_if *nif) {
     }
     run1(ncf, ifup, nif->name);
     ERR_BAIL(ncf);
-    ERR_THROW(!if_is_active(ncf, nif->name), ncf, EOTHER,
+
+    for (retries = 0; retries < 10; retries++) {
+        if ((is_active = if_is_active(ncf, nif->name)))
+            break;
+        usleep(250000);
+    }
+    ERR_THROW(!is_active, ncf, EOTHER,
               "interface %s failed to become active - "
               "possible disconnected cable.", nif->name);
     result = 0;
