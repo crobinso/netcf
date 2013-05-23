@@ -77,7 +77,7 @@ fi
 if test "x$with_driver" = "xcheck" && test -f /etc/ubuntu_version ; then
   with_driver=debian
 fi
-if test "x$with_driver" = "xcheck" && test -f /etc/suse-release ; then
+if test "x$with_driver" = "xcheck" && (test -f /etc/suse-release || test -f /etc/SuSE-release) ; then
   with_driver=suse
 fi
 if test "x$with_driver" = "xcheck" ; then
