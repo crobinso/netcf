@@ -3,7 +3,6 @@
                 version="1.0">
 
   <xsl:template name="bonding-opts">
-    <xsl:text>'</xsl:text>
     <xsl:if test="bond/@mode">mode=<xsl:value-of select='bond/@mode'/></xsl:if>
     <xsl:if test="bond/@mode = 'active-backup'"> primary=<xsl:value-of select='bond/interface[1]/@name'/></xsl:if>
     <xsl:if test="bond/miimon">
@@ -21,7 +20,6 @@
       <xsl:text> arp_ip_target=</xsl:text><xsl:value-of select="bond/arpmon/@target"/>
       <xsl:if test="bond/arpmon/@validate"><xsl:text> arp_validate=</xsl:text><xsl:value-of select="bond/arpmon/@validate"/></xsl:if>
     </xsl:if>
-    <xsl:text>'</xsl:text>
   </xsl:template>
 
 </xsl:stylesheet>

@@ -7,7 +7,7 @@
     <node label="IPADDR" value="192.168.50.7"/>
     <node label="NETMASK" value="255.255.255.0"/>
     <node label="GATEWAY" value="192.168.50.1"/>
-    <node label="BONDING_OPTS" value="'mode=active-backup primary=eth1 arp_interval=100 arp_ip_target=192.168.50.1 arp_validate=active'"/>
+    <node label="BONDING_OPTS" value="mode=active-backup primary=eth1 arp_interval=100 arp_ip_target=192.168.50.1 arp_validate=active"/>
   </tree>
   <tree path="/files/etc/sysconfig/network-scripts/ifcfg-eth1">
     <node label="DEVICE" value="eth1"/>
