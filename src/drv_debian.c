@@ -145,6 +145,7 @@ static int interface_deps(struct netcf *ncf, char ***slaves, const char *fmt, ..
     }
 
     nmatches = aug_match(aug, path, &matches);
+    FREE(path);
     ERR_COND_BAIL(nmatches < 0, ncf, EOTHER);
 
     if (!nmatches)
