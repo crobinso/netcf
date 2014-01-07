@@ -1,7 +1,7 @@
 /*
  * drv_redhat.c: the Red Hat distro family backend for netcf
  *
- * Copyright (C) 2009-2013 Red Hat Inc.
+ * Copyright (C) 2009-2014 Red Hat Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -989,7 +989,7 @@ int drv_lookup_by_mac_string(struct netcf *ncf, const char *mac,
 
 const char *drv_mac_string(struct netcf_if *nif) {
     struct netcf *ncf = nif->ncf;
-    const char *mac;
+    const char *mac = NULL;
     char *path = NULL;
     int r;
 

@@ -1,7 +1,7 @@
 /*
  * dutil_linux.c: Linux utility functions for driver backends.
  *
- * Copyright (C) 2009-2012 Red Hat Inc.
+ * Copyright (C) 2009-2012, 2014 Red Hat Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -221,7 +221,7 @@ int defnode(struct netcf *ncf, const char *name, const char *value,
     struct augeas *aug = get_augeas(ncf);
     va_list ap;
     char *expr = NULL;
-    int r, created;
+    int r = -1, created;
 
     ERR_BAIL(ncf);
 
@@ -370,10 +370,11 @@ int aug_match_mac(struct netcf *ncf, const char *mac, char ***matches) {
 
 /* Get the MAC address of the interface INTF */
 int aug_get_mac(struct netcf *ncf, const char *intf, const char **mac) {
-    int r;
-    char *path;
+    int r = -1;
+    char *path = NULL;
     struct augeas *aug = get_augeas(ncf);
 
+    *mac = NULL;
     ERR_BAIL(ncf);
 
     r = xasprintf(&path, "/files/sys/class/net/%s/address/content", intf);
