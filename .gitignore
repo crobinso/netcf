@@ -44,6 +44,8 @@ src/ncftool
 src/ncftool.1
 src/ncftransform
 src/netcf-transaction.init
+src/netcf-transaction.service
+src/netcf-transaction.sh
 src/netcf.syms
 stamp-h1
 tests/test-debian

@@ -1,27 +1,29 @@
 #!/bin/sh
 #
-# netcf-transaction: save/restore current network interface configuration
+# netcf-transaction.sh: save/restore current network interface configuration
 #
-# chkconfig:   - 09 91
-# description: This script can save the current state of network config, \
-#              and later revert to that config, or commit the new config \
-#              (by deleting the snapshot). At boot time, if there are \
-#              uncommitted changes to the network config, they are \
-#              reverted (and the discarded changes are archived in \
-#              /var/lib/netcf/network-rollback-*).
-
-### BEGIN INIT INFO
-# Provides: netcf-transaction
-# Required-Start: $local_fs
-# Short-Description: save/restore network configuration files
+# Copyright (C) 2011, 2014 Red Hat, Inc.
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library.  If not, see
+# <http://www.gnu.org/licenses/>.
+#
 # Description: This script can save the current state of network config,
 #              and later revert to that config, or commit the new config
 #              (by deleting the snapshot). At boot time, if there are
 #              uncommitted changes to the network config, they are
 #              reverted (and the discarded changes are archived in
-#              /var/lib/netcf/network-rollback-*).
-#
-### END INIT INFO
+#              @localstatedir@/lib/netcf/network-rollback-*).
 
 # special exit code that means a command was issued that is invalid for the
 # current state (e.g. change-begin when there is already an open transaction)

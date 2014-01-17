@@ -9,6 +9,22 @@ URL:            https://fedorahosted.org/netcf/
 Source0:        https://fedorahosted.org/released/%{name}/%{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+# Fedora 20 / RHEL-7 are where netcf first uses systemd. Although earlier
+# Fedora has systemd, netcf still used sysvinit there.
+%if 0%{?fedora} >= 20 || 0%{?rhel} >= 7
+    %define with_systemd 1
+%else
+    %define with_systemd 0
+%endif
+
+%if %{with_systemd}
+BuildRequires: systemd-units
+Requires(post): systemd-units
+Requires(post): systemd-sysv
+Requires(preun): systemd-units
+Requires(postun): systemd-units
+%endif
+
 BuildRequires:  readline-devel augeas-devel >= 0.5.2
 BuildRequires:  libxml2-devel libxslt-devel
 
@@ -60,22 +76,53 @@ The libraries for %{name}.
 %if %{with_libnl1}
 %define _with_libnl1 --with-libnl1
 %endif
+%if %{with_systemd}
+    %define sysinit --with-sysinit=systemd
+%else
+    %define sysinit --with-sysinit=initscripts
+%endif
+
 
 %configure --disable-static \
-           %{?_with_libnl1}
+           %{?_with_libnl1} \
+           %{sysinit}
 make %{?_smp_mflags}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT INSTALL="%{__install} -p"
+make install DESTDIR=$RPM_BUILD_ROOT SYSTEMD_UNIT_DIR=%{_unitdir} \
+     INSTALL="%{__install} -p"
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post libs -p /sbin/ldconfig
+%preun libs
 
-%postun libs -p /sbin/ldconfig
+%if %{with_systemd}
+    %systemd_preun netcf-transaction.service
+%else
+if [ $1 = 0 ]; then
+    /sbin/chkconfig --del netcf-transaction
+fi
+%endif
+
+%post libs
+
+/sbin/ldconfig
+%if %{with_systemd}
+    %systemd_post netcf-transaction.service
+    /bin/systemctl --no-reload enable netcf-transaction.service >/dev/null 2>&1 || :
+%else
+/sbin/chkconfig --add netcf-transaction
+%endif
+
+%postun libs
+
+/sbin/ldconfig
+%if %{with_systemd}
+    %systemd_postun netcf-transaction.service
+%endif
 
 %files
 %defattr(-,root,root,-)
@@ -86,7 +133,12 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{_datadir}/netcf
 %{_libdir}/*.so.*
+%if %{with_systemd}
+%{_unitdir}/netcf-transaction.service
+%else
 %{_sysconfdir}/rc.d/init.d/netcf-transaction
+%endif
+%attr(0755, root, root) %{_libexecdir}/netcf-transaction.sh
 %doc AUTHORS COPYING NEWS
 
 %files devel

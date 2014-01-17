@@ -50,14 +50,14 @@ if test "$prefix" = "/usr" && test "$sysconfdir" = '${prefix}/etc' ; then
 fi
 
 dnl
-dnl init script flavor
+dnl network driver flavor
 dnl
 AC_ARG_WITH([driver],
             [AS_HELP_STRING([--with-driver],
-                            [Network driver name])],
+                            [network driver name])],
             [],[with_driver=check])
 
-AC_MSG_CHECKING([Network driver name])
+AC_MSG_CHECKING([network driver name])
 if test "x$with_driver" = "xcheck" ; then
   case "$host" in
 	*-*-mingw*)
@@ -93,12 +93,57 @@ AM_CONDITIONAL([NETCF_DRIVER_SUSE], test "x$with_driver" = "xsuse")
 AM_CONDITIONAL([NETCF_DRIVER_MSWINDOWS], test "x$with_driver" = "xmswindows")
 
 if test "x$with_driver" = "xredhat"; then
+    # FIXME: This should be defined relative to $libexecdir,
+    # but that requires gnulib configmake to do correctly.
     AC_DEFINE_UNQUOTED([NETCF_TRANSACTION],
-                       ["$sysconfdir/rc.d/init.d/netcf-transaction"],
+                       ["/usr/libexec/netcf-transaction.sh"],
                        [Location of the netcf-transaction shell script])
 fi
-AM_CONDITIONAL([NETCF_INIT_SCRIPT_RED_HAT],
-               [test x$with_driver = xredhat])
+
+dnl
+dnl system init flavor
+dnl
+AC_MSG_CHECKING([for system init flavor])
+AC_ARG_WITH([sysinit],
+  [AS_HELP_STRING([--with-sysinit@<:@=STYLE@:>@],
+    [Style of init script to install: initscripts, systemd,
+     check, none @<:@default=check@:>@])],
+  [],[with_sysinit=check])
+
+case "$with_sysinit" in
+    systemd)
+       ;;
+    initscripts)
+       ;;
+    none)
+       ;;
+    check)
+       if test "$cross_compiling" != "yes" && \
+          test "$with_driver" = "redhat"; then
+         if test -d /etc/systemd; then
+           with_sysinit=systemd
+         else
+           with_sysinit=initscripts
+         fi
+       else
+         with_sysinit=none
+       fi
+       ;;
+    *)
+       AC_MSG_ERROR([Unknown system initscript flavor $with_sysinit])
+    ;;
+esac
+if test "x$with_sysinit" = "xcheck" ; then
+  with_sysinit=none
+fi
+
+AM_CONDITIONAL([NETCF_USE_INITSCRIPTS], test "$with_sysinit" = "initscripts")
+AM_CONDITIONAL([NETCF_USE_SYSTEMD], test "$with_sysinit" = "systemd")
+AM_CONDITIONAL([NETCF_TRANSACTION_SUPPORT], "$with_sysinit" != "none")
+AC_MSG_RESULT($with_sysinit)
+if test "$with_sysinit" != "none" && test "$with_driver" != "redhat"; then
+  AC_MSG_ERROR([netcf does not have support for $with_sysinit combined with the $with_driver driver])
+fi
 
 AC_ARG_WITH([libnl1],
             AS_HELP_STRING([--with-libnl1], [Force usage of libnl1 @<:@default=no@:>@]),
