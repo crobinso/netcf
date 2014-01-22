@@ -9,6 +9,11 @@ URL:            https://fedorahosted.org/netcf/
 Source0:        https://fedorahosted.org/released/%{name}/%{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+# Default to skipping autoreconf.  Distros can change just this one
+# line (or provide a command-line override) if they backport any
+# patches that touch configure.ac or Makefile.am.
+%{!?enable_autotools:%define enable_autotools 0}
+
 # Fedora 20 / RHEL-7 are where netcf first uses systemd. Although earlier
 # Fedora has systemd, netcf still used sysvinit there.
 %if 0%{?fedora} >= 20 || 0%{?rhel} >= 7
@@ -23,6 +28,13 @@ Requires(post): systemd-units
 Requires(post): systemd-sysv
 Requires(preun): systemd-units
 Requires(postun): systemd-units
+%endif
+%if 0%{?enable_autotools}
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: gettext-devel
+BuildRequires: libtool
+BuildRequires: /usr/bin/pod2man
 %endif
 
 BuildRequires:  readline-devel augeas-devel >= 0.5.2
@@ -82,6 +94,10 @@ The libraries for %{name}.
     %define sysinit --with-sysinit=initscripts
 %endif
 
+
+%if 0%{?enable_autotools}
+ autoreconf -if
+%endif
 
 %configure --disable-static \
            %{?_with_libnl1} \
