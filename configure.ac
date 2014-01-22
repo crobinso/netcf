@@ -139,7 +139,7 @@ fi
 
 AM_CONDITIONAL([NETCF_USE_INITSCRIPTS], test "$with_sysinit" = "initscripts")
 AM_CONDITIONAL([NETCF_USE_SYSTEMD], test "$with_sysinit" = "systemd")
-AM_CONDITIONAL([NETCF_TRANSACTION_SUPPORT], "$with_sysinit" != "none")
+AM_CONDITIONAL([NETCF_TRANSACTION_SUPPORT], test "$with_sysinit" != "none")
 AC_MSG_RESULT($with_sysinit)
 if test "$with_sysinit" != "none" && test "$with_driver" != "redhat"; then
   AC_MSG_ERROR([netcf does not have support for $with_sysinit combined with the $with_driver driver])
