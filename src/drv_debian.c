@@ -1,7 +1,7 @@
 /*
  * drv_debian.c: the debian backend for netcf
  *
- * Copyright (C) 2009-2013 Red Hat Inc.
+ * Copyright (C) 2009-2014 Red Hat Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -49,6 +49,7 @@
 
 #include <libexslt/exslt.h>
 
+#undef NETCF_TRANSACTION
 #define NETCF_TRANSACTION "/bin/false"
 
 static const char *const network_interfaces_path =

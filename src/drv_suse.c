@@ -57,6 +57,7 @@
 
 #define NETRULE_PATH "/etc/udev/rules.d/70-persistent-net.rules"
 
+#undef NETCF_TRANSACTION
 #define NETCF_TRANSACTION "/bin/false"
 
 static const char *const aug_files =

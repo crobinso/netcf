@@ -32,6 +32,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
+#include "configmake.h"
 #include "safe-alloc.h"
 #include "ref.h"
 #include "list.h"

@@ -93,10 +93,8 @@ AM_CONDITIONAL([NETCF_DRIVER_SUSE], test "x$with_driver" = "xsuse")
 AM_CONDITIONAL([NETCF_DRIVER_MSWINDOWS], test "x$with_driver" = "xmswindows")
 
 if test "x$with_driver" = "xredhat"; then
-    # FIXME: This should be defined relative to $libexecdir,
-    # but that requires gnulib configmake to do correctly.
     AC_DEFINE_UNQUOTED([NETCF_TRANSACTION],
-                       ["/usr/libexec/netcf-transaction.sh"],
+                       [LIBEXECDIR "/netcf-transaction.sh"],
                        [Location of the netcf-transaction shell script])
 fi
 
