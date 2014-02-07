@@ -78,6 +78,10 @@ developing applications that use %{name}.
 Summary:        Libraries for %{name}
 Group:          System Environment/Libraries
 
+# bridge-utils is needed because /sbin/ifup calls brctl
+# if you create a bridge device
+Requires:       bridge-utils
+
 %description    libs
 The libraries for %{name}.
 
