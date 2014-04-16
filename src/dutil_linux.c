@@ -456,6 +456,15 @@ void modprobed_unalias_bond(struct netcf *ncf, const char *name) {
 
 int if_is_active(struct netcf *ncf, const char *intf) {
     struct ifreq ifr;
+    short flags_to_check = IFF_UP;
+
+    /*
+     * IFF_RUNNING is set on a bridge only if there is at least one
+     * network device attached.
+     */
+    if(if_type(ncf, intf) != NETCF_IFACE_TYPE_BRIDGE) {
+        flags_to_check |= IFF_RUNNING;
+    }
 
     MEMZERO(&ifr, 1);
     strncpy(ifr.ifr_name, intf, sizeof(ifr.ifr_name));
@@ -463,7 +472,7 @@ int if_is_active(struct netcf *ncf, const char *intf) {
     if (ioctl(ncf->driver->ioctl_fd, SIOCGIFFLAGS, &ifr))  {
         return 0;
     }
-    return ((ifr.ifr_flags & (IFF_UP|IFF_RUNNING)) == (IFF_UP|IFF_RUNNING));
+    return ((ifr.ifr_flags & flags_to_check) == flags_to_check);
 }
 
 netcf_if_type_t if_type(struct netcf *ncf, const char *intf) {
