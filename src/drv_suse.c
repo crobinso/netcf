@@ -1020,6 +1020,9 @@ struct netcf_if *drv_define(struct netcf *ncf, const char *xml_str) {
 
     name = device_name_from_xml(ncf, ncf_xml);
     ERR_COND_BAIL(name == NULL, ncf, EINTERNAL);
+    ERR_THROW(strlen(name) >= IFNAMSIZ, ncf, EINTERNAL,
+              "The interface name '%s' exceeds the maximum allowed length: %d",
+              name, IFNAMSIZ - 1);
 
     rm_all_interfaces(ncf, ncf_xml);
     ERR_BAIL(ncf);
