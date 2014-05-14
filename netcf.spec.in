@@ -169,6 +169,15 @@ fi
 %{_libdir}/pkgconfig/netcf.pc
 
 %changelog
+* Wed May 14 2014 Laine Stump <laine@redhat.com> - 0.2.4-1
+ - wait for IFF_UP and IFF_RUNNING after calling ifup
+ - don't require IFF_RUNNING for bridge devices
+ - avoid memory leak in debian when listing interfaces
+ - avoid use of uninitialized data when getting mac address
+   (fixes https://bugzilla.redhat.com/show_bug.cgi?id=1046594 )
+ - limit interface names to IFNAMSIZ-1 characters in length
+ - support systemd for netcf-transaction
+
 * Fri Dec 21 2012 Laine Stump <laine@redhat.com> - 0.2.3-1
 - eliminate calls to nl_cache_mngt_provide(), to avoid
   non-threadsafe code in libnl (and because it isn't needed
