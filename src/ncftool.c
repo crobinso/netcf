@@ -830,10 +830,13 @@ static int main_loop(void) {
         }
 
         cmdret = run_command_line(line, &cmdstatus);
-        if (cmdret == 0 && cmdstatus == CMD_RES_QUIT)
+        if (cmdret == 0 && cmdstatus == CMD_RES_QUIT) {
+            free(line);
             return ret;
+        }
 
         add_history(line);
+        free(line);
         ret = cmdret;
     }
 }
