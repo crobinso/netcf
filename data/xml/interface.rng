@@ -39,6 +39,17 @@
         <attribute name="address"><ref name="mac-addr"/></attribute>
       </element>
     </optional>
+    <optional>
+      <element name="link">
+        <optional>
+          <attribute name="speed"><ref name="uint"/></attribute>
+        </optional>
+        <optional>
+          <attribute name="state"><ref name="link-state"/></attribute>
+        </optional>
+      </element>
+      <empty/>
+    </optional>
     <!-- FIXME: Allow (some) ethtool options -->
   </define>
 
@@ -438,6 +449,18 @@
     <data type='string'>
       <param name="pattern">([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}</param>
     </data>
+  </define>
+
+  <define name="link-state">
+    <choice>
+      <value>unknown</value>
+      <value>notpresent</value>
+      <value>down</value>
+      <value>lowerlayerdown</value>
+      <value>testing</value>
+      <value>dormant</value>
+      <value>up</value>
+    </choice>
   </define>
 
   <define name='ipv4-addr'>
