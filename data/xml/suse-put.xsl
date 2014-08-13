@@ -214,7 +214,7 @@
         <xsl:if test="node[@label = 'IPV6_AUTOCONF'][@value = 'yes']">
           <autoconf/>
         </xsl:if>
-        <xsl:if test="node[@label = 'DHCPV6'][@value = 'yes']">
+        <xsl:if test="node[@label = 'DHCPV6C'][@value = 'yes']">
           <dhcp/>
         </xsl:if>
         <xsl:if test="node[@label = 'IPV6ADDR']">

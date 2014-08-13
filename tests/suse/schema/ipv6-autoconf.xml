@@ -5,6 +5,6 @@
     <node label="ONBOOT" value="yes"/>
     <node label="IPV6INIT" value="yes"/>
     <node label="IPV6_AUTOCONF" value="yes"/>
-    <node label="DHCPV6" value="no"/>
+    <node label="DHCPV6C" value="no"/>
   </tree>
 </forest>

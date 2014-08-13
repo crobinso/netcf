@@ -211,10 +211,10 @@
       <node label="IPV6_AUTOCONF" value="no"/>
     </xsl:if>
     <xsl:if test="count(dhcp) > 0">
-      <node label="DHCPV6" value="yes"/>
+      <node label="DHCPV6C" value="yes"/>
     </xsl:if>
     <xsl:if test="count(dhcp) = 0">
-      <node label="DHCPV6" value="no"/>
+      <node label="DHCPV6C" value="no"/>
     </xsl:if>
     <xsl:if test="count(ip) > 0">
       <node label="IPV6ADDR">
