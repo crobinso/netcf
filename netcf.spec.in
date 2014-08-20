@@ -169,6 +169,11 @@ fi
 %{_libdir}/pkgconfig/netcf.pc
 
 %changelog
+* Wed Aug 20 2014 Laine Stump <laine@redhat.com> - 0.2.5-1
+ - report link state/speed in interface status
+ - change DHCPv6 to DHCPV6C in ifcfg files
+ - max vlan id is 4095, not 4096
+
 * Wed May 14 2014 Laine Stump <laine@redhat.com> - 0.2.4-1
  - wait for IFF_UP and IFF_RUNNING after calling ifup
  - don't require IFF_RUNNING for bridge devices

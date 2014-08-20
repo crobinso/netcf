@@ -1,3 +1,8 @@
+0.2.5 - 2014-08-20
+ - report link state/speed in interface status
+ - change DHCPv6 to DHCPV6C in ifcfg files
+ - max vlan id is 4095, not 4096
+
 0.2.4 - 2014-05-14
 
  - wait for IFF_UP and IFF_RUNNING after calling ifup
