@@ -1,7 +1,7 @@
 /*
  * xslt_ext.c: XSLT extension functions needed by the stylesheets
  *
- * Copyright (C) 2009 Red Hat Inc.
+ * Copyright (C) 2009, 2014 Red Hat Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -43,6 +43,8 @@
 static void ipcalc_netmask(xmlXPathParserContextPtr ctxt, int nargs) {
     double raw_prefix;
     unsigned long prefix = 0;
+    struct in_addr netmask;
+    xmlChar netmask_str[16];
 
     if (nargs != 1) {
         xmlXPathSetArityError(ctxt);
@@ -69,10 +71,13 @@ static void ipcalc_netmask(xmlXPathParserContextPtr ctxt, int nargs) {
         goto error;
     }
 
-    struct in_addr netmask;
-    xmlChar netmask_str[16];
-
-    netmask.s_addr = htonl(~(0xffffffffu >> prefix));
+    /* We need to special-case 32, because the result of "x >> 32"
+     * is undefined when the number of bits in x's type is == 32.
+     */
+    if (prefix == 32)
+        netmask.s_addr = 0xffffffffu;
+    else
+        netmask.s_addr = htonl(~(0xffffffffu >> prefix));
 
     if (! inet_ntop(AF_INET, &netmask,
                     (char *) netmask_str, sizeof(netmask_str))) {
