@@ -40,17 +40,8 @@
           <attribute name="address"><ref name="mac-addr"/></attribute>
         </element>
       </optional>
-      <optional>
-        <element name="link">
-          <optional>
-            <attribute name="speed"><ref name="uint"/></attribute>
-          </optional>
-          <optional>
-            <attribute name="state"><ref name="link-state"/></attribute>
-          </optional>
-        </element>
-        <empty/>
-      </optional>
+      <ref name="link-speed-state"/>
+      <empty/>
       <!-- FIXME: Allow (some) ethtool options -->
     </interleave>
   </define>
@@ -86,6 +77,7 @@
          of the form DEVICE.VLAN
     -->
     <optional><ref name="name-attr"/></optional>
+    <ref name="link-speed-state"/>
   </define>
 
   <define name="vlan-device">
@@ -164,6 +156,7 @@
       <value>bond</value>
     </attribute>
     <ref name="name-attr"/>
+    <ref name="link-speed-state"/>
   </define>
 
   <define name="bond-element">
@@ -483,6 +476,21 @@
       <value>dormant</value>
       <value>up</value>
     </choice>
+  </define>
+
+  <define name="link-speed-state">
+    <optional>
+      <element name="link">
+        <optional>
+          <attribute name="speed">
+            <ref name="uint"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="state"><ref name="link-state"/></attribute>
+        </optional>
+      </element>
+    </optional>
   </define>
 
   <define name='ipv4-addr'>
