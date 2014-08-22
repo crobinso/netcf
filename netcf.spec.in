@@ -169,6 +169,10 @@ fi
 %{_libdir}/pkgconfig/netcf.pc
 
 %changelog
+* Fri Aug 22 2014 Laine Stump <laine@redhat.com> - 0.2.6-1
+ - allow interleaved elements in interface XML schema
+ - allow <link> element in vlan and bond interfaces
+
 * Wed Aug 20 2014 Laine Stump <laine@redhat.com> - 0.2.5-1
  - report link state/speed in interface status
  - change DHCPv6 to DHCPV6C in ifcfg files
