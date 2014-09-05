@@ -865,10 +865,6 @@ struct netcf_if *drv_define(struct netcf *ncf, const char *xml_str) {
     xmlDocPtr ncf_xml = NULL, aug_xml = NULL;
     char *name = NULL;
     struct netcf_if *result = NULL;
-    int r;
-    struct augeas *aug = get_augeas(ncf);
-
-    ERR_BAIL(ncf);
 
     ncf_xml = parse_xml(ncf, xml_str);
     ERR_BAIL(ncf);
@@ -894,12 +890,8 @@ struct netcf_if *drv_define(struct netcf *ncf, const char *xml_str) {
     bond_setup(ncf, name, true);
     ERR_BAIL(ncf);
 
-    r = aug_save(aug);
-    if (r < 0 && NCF_DEBUG(ncf)) {
-        fprintf(stderr, "Errors from aug_save:\n");
-        aug_print(aug, stderr, "/augeas//error");
-    }
-    ERR_THROW(r < 0, ncf, EOTHER, "aug_save failed");
+    aug_save_assert(ncf);
+    ERR_BAIL(ncf);
 
     result = make_netcf_if(ncf, name);
     ERR_BAIL(ncf);
@@ -914,12 +906,7 @@ struct netcf_if *drv_define(struct netcf *ncf, const char *xml_str) {
 }
 
 int drv_undefine(struct netcf_if *nif) {
-    struct augeas *aug = NULL;
     struct netcf *ncf = nif->ncf;
-    int r;
-
-    aug = get_augeas(ncf);
-    ERR_BAIL(ncf);
 
     bond_setup(ncf, nif->name, false);
     ERR_BAIL(ncf);
@@ -927,8 +914,8 @@ int drv_undefine(struct netcf_if *nif) {
     rm_interface(ncf, nif->name);
     ERR_BAIL(ncf);
 
-    r = aug_save(aug);
-    ERR_COND_BAIL(r < 0, ncf, EOTHER);
+    aug_save_assert(ncf);
+    ERR_BAIL(ncf);
 
     return 0;
  error:

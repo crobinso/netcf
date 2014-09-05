@@ -215,6 +215,47 @@ struct augeas *get_augeas(struct netcf *ncf) {
     return NULL;
 }
 
+int aug_save_assert(struct netcf *ncf)
+{
+    int r = -1;
+    const char *err, *errmsg, *path = "unknown";
+    struct augeas *aug = get_augeas(ncf);
+
+    ERR_BAIL(ncf);
+
+    r = aug_save(aug);
+    if (r >= 0)
+        goto done;
+
+    if (NCF_DEBUG(ncf)) {
+        fprintf(stderr, "Errors from aug_save:\n");
+        aug_print(aug, stderr, "/augeas//error");
+    }
+
+    if (aug_get(aug, "/augeas//error", &err) == 1) {
+        if (aug_get(aug, "/augeas//error/../path", &path) == 1) {
+            /* strip /files prefix */
+            if (path != NULL && *path != '\0')
+                path = strchrnul(path + 1, '/');
+        }
+        if (aug_get(aug, "/augeas//error/message", &errmsg) == 1) {
+            report_error(ncf, NETCF_EOTHER, "aug_save failed on %s: %s (%s)",
+                         path, err, errmsg);
+        } else {
+            report_error(ncf, NETCF_EOTHER, "aug_save failed on %s: %s",
+                         path, err);
+        }
+    } else if (aug_match(aug, "/augeas//error", NULL) > 1) {
+        report_error(ncf, NETCF_EOTHER, "aug_save failed: multiple failures");
+    } else {
+        report_error(ncf, NETCF_EOTHER, "aug_save failed: unknown failure");
+    }
+
+ error:
+ done:
+    return r;
+}
+
 ATTRIBUTE_FORMAT(printf, 4, 5)
 int defnode(struct netcf *ncf, const char *name, const char *value,
                    const char *format, ...) {

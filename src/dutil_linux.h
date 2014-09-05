@@ -69,6 +69,9 @@ int remove_augeas_xfm_table(struct netcf *ncf,
 /* Get or create the augeas instance from NCF */
 struct augeas *get_augeas(struct netcf *ncf);
 
+/* Save changes in augeas and raise error with message on failure */
+int aug_save_assert(struct netcf *ncf);
+
 /* Define a node inside the augeas tree */
 ATTRIBUTE_FORMAT(printf, 4, 5)
 int defnode(struct netcf *ncf, const char *name, const char *value,
