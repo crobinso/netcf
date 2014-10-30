@@ -176,7 +176,8 @@
     <xsl:variable name="uses_dhcp"
                   select="node[@label = 'BOOTPROTO']/@value = 'dhcp'"/>
     <xsl:variable name="uses_static"
-                  select="count(node[@label = 'IPADDR']) > 0"/>
+                  select="count(node[@label = 'IPADDR']) +
+                          count(node[@label = 'IPADDR0']) > 0"/>
     <xsl:variable name="uses_ipv4" select="$uses_dhcp or $uses_static"/>
     <xsl:if test="$uses_ipv4">
     <protocol family="ipv4">
@@ -189,23 +190,55 @@
           </dhcp>
         </xsl:when>
         <xsl:when test="$uses_static">
-          <ip address="{node[@label = 'IPADDR']/@value}">
-            <xsl:choose>
-              <xsl:when test="node[@label = 'PREFIX']">
-                <xsl:attribute name="prefix"><xsl:value-of select="node[@label = 'PREFIX']/@value"/></xsl:attribute>
-              </xsl:when>
-              <xsl:when test="node[@label = 'NETMASK']">
-                <xsl:attribute name="prefix"><xsl:value-of select="ipcalc:prefix(node[@label = 'NETMASK']/@value)"/></xsl:attribute>
-              </xsl:when>
-            </xsl:choose>
-          </ip>
-          <xsl:if test="node[@label = 'GATEWAY']">
-            <route gateway="{node[@label = 'GATEWAY']/@value}"/>
-          </xsl:if>
+          <xsl:choose>
+            <xsl:when test="node[@label = 'IPADDR']">
+              <ip address="{node[@label = 'IPADDR']/@value}">
+                <xsl:call-template name="ipv4-attributes"/>
+              </ip>
+            </xsl:when>
+            <xsl:when test="node[@label = 'IPADDR0']">
+              <ip address="{node[@label = 'IPADDR0']/@value}">
+                <xsl:call-template name="ipv4-attributes"/>
+              </ip>
+            </xsl:when>
+          </xsl:choose>
+          <xsl:choose>
+            <xsl:when test="node[@label = 'GATEWAY']">
+              <route gateway="{node[@label = 'GATEWAY']/@value}"/>
+            </xsl:when>
+            <xsl:when test="node[@label = 'GATEWAY0']">
+              <route gateway="{node[@label = 'GATEWAY0']/@value}"/>
+            </xsl:when>
+          </xsl:choose>
         </xsl:when>
       </xsl:choose>
     </protocol>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="ipv4-attributes">
+    <xsl:choose>
+      <xsl:when test="node[@label = 'PREFIX']">
+        <xsl:attribute name="prefix">
+          <xsl:value-of select="node[@label = 'PREFIX']/@value"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="node[@label = 'PREFIX0']">
+        <xsl:attribute name="prefix">
+          <xsl:value-of select="node[@label = 'PREFIX0']/@value"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="node[@label = 'NETMASK']">
+        <xsl:attribute name="prefix">
+          <xsl:value-of select="ipcalc:prefix(node[@label = 'NETMASK']/@value)"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="node[@label = 'NETMASK0']">
+        <xsl:attribute name="prefix">
+          <xsl:value-of select="ipcalc:prefix(node[@label = 'NETMASK0']/@value)"/>
+        </xsl:attribute>
+      </xsl:when>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="protocol-ipv6">
