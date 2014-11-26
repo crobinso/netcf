@@ -219,7 +219,7 @@ static char *find_ifcfg_path(struct netcf *ncf, const char *name) {
     /* Now find the config by MAC, matching on HWADDR */
     r = aug_get_mac(ncf, name, &mac);
     ERR_COND_BAIL(r < 0, ncf, EOTHER);
-    if (r > 0) {
+    if (r > 0 && mac) {
         path = find_ifcfg_path_by_hwaddr(ncf, mac);
         ERR_BAIL(ncf);
         if (path != NULL)
