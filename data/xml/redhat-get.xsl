@@ -226,14 +226,12 @@
     <xsl:if test="count(ip) > 1">
       <node label="IPV6ADDR_SECONDARIES">
         <xsl:attribute name="value">
-          <xsl:text>'</xsl:text>
           <xsl:for-each select="ip[1]/following-sibling::ip[following-sibling::ip]">
             <xsl:value-of select="@address"/><xsl:if test="@prefix">/<xsl:value-of select="@prefix"/></xsl:if><xsl:value-of select="string(' ')"/>
           </xsl:for-each>
           <xsl:for-each select="ip[last()]">
             <xsl:value-of select="@address"/><xsl:if test="@prefix">/<xsl:value-of select="@prefix"/></xsl:if>
           </xsl:for-each>
-          <xsl:text>'</xsl:text>
         </xsl:attribute>
       </node>
     </xsl:if>

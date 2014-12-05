@@ -7,6 +7,6 @@
     <node label="IPV6_AUTOCONF" value="no"/>
     <node label="DHCPV6C" value="no"/>
     <node label="IPV6ADDR" value="3ffe:ffff:0:5::1/128"/>
-    <node label="IPV6ADDR_SECONDARIES" value="'3ffe:ffff:0:5::3/128 3ffe:ffff:0:5::5/128'"/>
+    <node label="IPV6ADDR_SECONDARIES" value="3ffe:ffff:0:5::3/128 3ffe:ffff:0:5::5/128"/>
   </tree>
 </forest>
