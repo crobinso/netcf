@@ -38,11 +38,10 @@ BuildRequires: git
 %endif
 
 %if %{with_systemd}
-BuildRequires: systemd-units
-Requires(post): systemd-units
-Requires(post): systemd-sysv
-Requires(preun): systemd-units
-Requires(postun): systemd-units
+BuildRequires: systemd
+Requires(post): systemd
+Requires(preun): systemd
+Requires(postun): systemd
 %endif
 %if 0%{?enable_autotools}
 BuildRequires: autoconf
