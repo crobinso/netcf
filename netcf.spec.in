@@ -191,12 +191,10 @@ fi
 %endif
 
 %files
-%defattr(-,root,root,-)
 %{_bindir}/ncftool
 %{_mandir}/man1/ncftool.1*
 
 %files libs
-%defattr(-,root,root,-)
 %{_datadir}/netcf
 %{_libdir}/*.so.*
 %if %{with_systemd}
@@ -208,7 +206,6 @@ fi
 %doc AUTHORS COPYING NEWS
 
 %files devel
-%defattr(-,root,root,-)
 %doc
 %{_includedir}/*
 %{_libdir}/*.so
