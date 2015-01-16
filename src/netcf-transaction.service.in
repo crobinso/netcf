@@ -9,7 +9,6 @@ Before=NetworkManager.service
 ExecStart=@libexecdir@/netcf-transaction.sh start
 Type=oneshot
 RemainAfterExit=yes
-StandardOutput=journal+console
 
 [Install]
 WantedBy=multi-user.target
