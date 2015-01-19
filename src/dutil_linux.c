@@ -429,13 +429,19 @@ int aug_match_mac(struct netcf *ncf, const char *mac, char ***matches) {
 /* Get the MAC address of the interface INTF */
 int aug_get_mac(struct netcf *ncf, const char *intf, const char **mac) {
     int r = -1;
+    char *escaped_intf = NULL;
     char *path = NULL;
     augeas *aug = get_augeas(ncf);
 
     *mac = NULL;
     ERR_BAIL(ncf);
 
-    r = xasprintf(&path, "/files/sys/class/net/%s/address/content", intf);
+    r = aug_escape_name_wrap(ncf, aug, intf, &escaped_intf);
+    ERR_NOMEM(r < 0, ncf);
+
+    r = xasprintf(&path,
+                  "/files/sys/class/net/%s/address/content",
+                  escaped_intf ? escaped_intf : intf);
     ERR_NOMEM(r < 0, ncf);
 
     r = aug_get(aug, path, mac);
@@ -444,6 +450,7 @@ int aug_get_mac(struct netcf *ncf, const char *intf, const char **mac) {
     /* fallthrough intentional */
  error:
     FREE(path);
+    FREE(escaped_intf);
     return r;
 }
 
