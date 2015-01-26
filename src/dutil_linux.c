@@ -1,7 +1,7 @@
 /*
  * dutil_linux.c: Linux utility functions for driver backends.
  *
- * Copyright (C) 2009-2012, 2014 Red Hat Inc.
+ * Copyright (C) 2009-2012, 2014-2015 Red Hat Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -1081,14 +1081,15 @@ static void add_link_info(struct netcf *ncf,
     xasprintf(&path, "/sys/class/net/%s/operstate", ifname);
     ERR_NOMEM(!path, ncf);
     state = read_file(path, &length);
-    FREE(path);
-    ERR_THROW_STRERROR(!state, ncf, EFILE, "Failed to read %s", path);
+    ERR_THROW_STRERROR(!state, ncf, EFILE, "Failed to read %s : %s",
+                       path, errbuf);
     if ((nl = strchr(state, '\n')))
         *nl = 0;
     prop = xmlSetProp(link_node, BAD_CAST "state", BAD_CAST state);
     ERR_NOMEM(!prop, ncf);
 
     if (!strcmp(state, "up")) {
+        FREE(path);
         xasprintf(&path, "/sys/class/net/%s/speed", ifname);
         ERR_NOMEM(path == NULL, ncf);
         speed = read_file(path, &length);
@@ -1100,7 +1101,8 @@ static void add_link_info(struct netcf *ncf,
             speed = strdup("0");
             ERR_NOMEM(!speed, ncf);
         }
-        ERR_THROW_STRERROR(!speed, ncf, EFILE, "Failed to read %s", path);
+        ERR_THROW_STRERROR(!speed, ncf, EFILE, "Failed to read %s : %s",
+                           path, errbuf);
         if ((nl = strchr(speed, '\n')))
             *nl = 0;
     } else {
