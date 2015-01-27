@@ -1081,8 +1081,15 @@ static void add_link_info(struct netcf *ncf,
     xasprintf(&path, "/sys/class/net/%s/operstate", ifname);
     ERR_NOMEM(!path, ncf);
     state = read_file(path, &length);
-    ERR_THROW_STRERROR(!state, ncf, EFILE, "Failed to read %s : %s",
-                       path, errbuf);
+    if (!state) {
+        /* missing operstate is *not* an error. It could be due to an
+         * alias interface, which has no entry in /sys/class/net at
+         * all, for example. This is similar to the situation where we
+         * can't find an ifindex in add_ethernet_info().
+         */
+        state = strdup("");
+        ERR_NOMEM(!state, ncf);
+    }
     if ((nl = strchr(state, '\n')))
         *nl = 0;
     prop = xmlSetProp(link_node, BAD_CAST "state", BAD_CAST state);
