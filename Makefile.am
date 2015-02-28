@@ -19,7 +19,6 @@ dist_xml_DATA=data/xml/augeas.rng data/xml/interface.rng \
 dist_netcf_DATA=data/iptables-forward-bridged
 dist_lens_DATA= \
 	data/lenses/netcf.aug \
-	data/lenses/sysconfig.aug \
 	data/lenses/persist_net_rules.aug \
 	data/lenses/routes.aug
 
