@@ -1,7 +1,7 @@
 /*
  * dutil.c: Global utility functions for driver backends.
  *
- * Copyright (C) 2009 Red Hat Inc.
+ * Copyright (C) 2009-2011, 2015 Red Hat Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -126,6 +126,49 @@ argv_to_string(const char *const *argv) {
 
     return ret;
 }
+
+
+/* The characters that can follow a name in an augeas location
+ * expression (aka path) The parser will assume that name (path
+ * component) is finished when it encounters any of these characters,
+ * unless they are escaped by preceding them with a '\\'.
+ *
+ * See parse_name in the augeas source for the gory details
+ */
+static const char const name_escape[] = "][|/=()!," "\\ ";
+
+/* a local equivalent to augeas' aug_escape_name() API, for those
+ * times when it isn't available.
+ */
+int
+aug_escape_name_base(const char *in, char **out)
+{
+    const char *p;
+    int num_to_escape = 0;
+    char *s;
+
+    *out = NULL;
+
+    for (p = in; *p; p++) {
+        if (strchr(name_escape, *p) || isspace(*p))
+            num_to_escape += 1;
+    }
+
+    if (num_to_escape == 0)
+        return 0;
+
+    if (ALLOC_N(*out, strlen(in) + num_to_escape + 1) < 0)
+        return -1;
+
+    for (p = in, s = *out; *p; p++) {
+        if (strchr(name_escape, *p) || isspace(*p))
+            *s++ = '\\';
+        *s++ = *p;
+    }
+    *s = '\0';
+    return 0;
+}
+
 
 void report_error(struct netcf *ncf, netcf_errcode_t errcode,
                   const char *format, ...) {

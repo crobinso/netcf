@@ -1,7 +1,7 @@
 /*
  * dutil.h: Global utility functions for driver backends.
  *
- * Copyright (C) 2009 Red Hat Inc.
+ * Copyright (C) 2009-2011, 2015 Red Hat Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -40,6 +40,12 @@ int xasprintf(char **strp, const char *format, ...);
  * with a space between each arg.
  */
 char *argv_to_string(const char *const *argv);
+
+/* a simpler aug_escape_name() function (see augeas API) that
+ * doesn't/can't require aug or ncf objects, for calling when those
+ * objects (or possibly even their types) aren't available.
+ */
+int aug_escape_name_base(const char *in, char **out);
 
 /*
  * Error reporting

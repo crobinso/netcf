@@ -282,6 +282,23 @@ int defnode(struct netcf *ncf, const char *name, const char *value,
     return (r < 0) ? -1 : created;
 }
 
+
+/* a wrapper around / functional equivalent of the new augeas api
+ * "aug_escape_name()". It is copied here so that netcf can take
+ * advantage of it even when the installed augeas version is too old.
+ */
+int
+aug_escape_name_wrap(struct netcf *ncf ATTRIBUTE_UNUSED,
+                     const augeas *aug ATTRIBUTE_UNUSED,
+                     const char *in, char **out)
+{
+    /* in the future we will use aug to call the augeas API,
+     * and may use ncf to set error codes
+     */
+    return aug_escape_name_base(in, out);
+}
+
+
 int aug_fmt_set(struct netcf *ncf, const char *value, const char *fmt, ...)
 {
     augeas *aug = NULL;
