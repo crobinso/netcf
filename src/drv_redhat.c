@@ -197,6 +197,7 @@ static char *find_ifcfg_path_by_device(struct netcf *ncf, const char *name) {
  */
 static char *find_ifcfg_path(struct netcf *ncf, const char *name) {
     augeas *aug = NULL;
+    char *escaped_name = NULL;
     char *path = NULL;
     const char *mac = NULL;
     int r, nmatches;
@@ -204,15 +205,19 @@ static char *find_ifcfg_path(struct netcf *ncf, const char *name) {
     aug = get_augeas(ncf);
     ERR_BAIL(ncf);
 
+    r = aug_escape_name_wrap(ncf, aug, name, &escaped_name);
+    ERR_NOMEM(r < 0, ncf);
+
     /* if ifcfg-NAME exists, use that */
-    r = xasprintf(&path, "%s/ifcfg-%s", network_scripts_path, name);
+    r = xasprintf(&path, "%s/ifcfg-%s", network_scripts_path,
+                  escaped_name ? escaped_name : name);
     ERR_NOMEM(r < 0, ncf);
 
     nmatches = aug_match(aug, path, NULL);
     ERR_COND_BAIL(nmatches < 0, ncf, EOTHER);
 
     if (nmatches == 1)
-        return path;
+        goto cleanup;
 
     FREE(path);
 
@@ -223,16 +228,17 @@ static char *find_ifcfg_path(struct netcf *ncf, const char *name) {
         path = find_ifcfg_path_by_hwaddr(ncf, mac);
         ERR_BAIL(ncf);
         if (path != NULL)
-            return path;
+            goto cleanup;
     }
 
     path = find_ifcfg_path_by_device(ncf, name);
     ERR_BAIL(ncf);
-
+ cleanup:
+    FREE(escaped_name);
     return path;
  error:
     FREE(path);
-    return NULL;
+    goto cleanup;
 }
 
 /* Given NDEVS path to DEVICE entries which may contain duplicate devices,

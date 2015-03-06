@@ -142,22 +142,27 @@ static int is_slave(struct netcf *ncf, const char *intf) {
 
 static bool has_ifcfg_file(struct netcf *ncf, const char *name) {
     augeas *aug = NULL;
+    char *escaped_name = NULL;
     char *path = NULL;
     int nmatches = 0, r;
 
     aug = get_augeas(ncf);
     ERR_BAIL(ncf);
 
+    r = aug_escape_name_wrap(aug, name, &escaped_name);
+    ERR_NOMEM(r < 0, ncf);
+
     /* if ifcfg-NAME exists, true */
-    r = xasprintf(&path, "%s/%s/ifcfg-%s", aug_files, network_scripts_path, name);
+    r = xasprintf(&path, "%s/%s/ifcfg-%s", aug_files, network_scripts_path,
+                  escaped_name ? escaped_name : name);
     ERR_NOMEM(r < 0, ncf);
 
     nmatches = aug_match(aug, path, NULL);
     ERR_COND_BAIL(nmatches < 0, ncf, EOTHER);
 
-    FREE(path);
-
 error:
+    FREE(path);
+    FREE(escaped_name);
     return nmatches > 0;
 }
 
@@ -283,26 +288,30 @@ static int find_hwaddr_by_device(struct netcf *ncf, const char *name,
  */
 static char *find_ifcfg_path(struct netcf *ncf, const char *name) {
     augeas *aug = NULL;
+    char *escaped_name = NULL;
     char *path = NULL;
     int r, nmatches;
 
     aug = get_augeas(ncf);
     ERR_BAIL(ncf);
 
+    r = aug_escape_name_wrap(aug, name, &escaped_name);
+    ERR_NOMEM(r < 0, ncf);
+
     /* if ifcfg-NAME exists, use that */
-    r = xasprintf(&path, "%s/%s/ifcfg-%s", aug_files, network_scripts_path, name);
+    r = xasprintf(&path, "%s/%s/ifcfg-%s", aug_files, network_scripts_path,
+                  escaped_name ? escaped_name : name);
     ERR_NOMEM(r < 0, ncf);
 
     nmatches = aug_match(aug, path, NULL);
     ERR_COND_BAIL(nmatches < 0, ncf, EOTHER);
 
-    if (nmatches == 1)
-        return path;
-
+ cleanup:
+    FREE(escaped_name);
+    return path;
  error:
     FREE(path);
-
-    return NULL;
+    goto cleanup;
 }
 
 static int list_interfaces(struct netcf *ncf, char ***intf) {
