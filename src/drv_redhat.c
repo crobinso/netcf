@@ -1,7 +1,7 @@
 /*
  * drv_redhat.c: the Red Hat distro family backend for netcf
  *
- * Copyright (C) 2009-2014 Red Hat Inc.
+ * Copyright (C) 2009-2015 Red Hat Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -131,7 +131,7 @@ static char *find_ifcfg_path_by_hwaddr(struct netcf *ncf, const char *mac) {
 
     int nhwaddr = 0, r;
     char **hwaddr = NULL;
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
 
     aug = get_augeas(ncf);
     ERR_BAIL(ncf);
@@ -199,7 +199,7 @@ static char *find_ifcfg_path_by_device(struct netcf *ncf, const char *name) {
  * in /etc/sysconfig/network-scripts/network-functions
  */
 static char *find_ifcfg_path(struct netcf *ncf, const char *name) {
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
     char *path = NULL;
     const char *mac = NULL;
     int r, nmatches;
@@ -245,7 +245,7 @@ static char *find_ifcfg_path(struct netcf *ncf, const char *name) {
 static int uniq_ifcfg_paths(struct netcf *ncf,
                             int ndevs, char **devs,
                             char ***intf) {
-    struct augeas *aug;
+    augeas *aug;
     int r;
     int ndevnames = 0;
     const char **devnames = NULL;
@@ -399,7 +399,7 @@ static int list_interface_ids(struct netcf *ncf,
                               int maxnames, char **names,
                               unsigned int flags,
                               const char *id_attr) {
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
     int nint = 0, nmatches = 0, nqualified = 0, result = 0, r;
     char **intf = NULL, **matches = NULL;
 
@@ -492,7 +492,7 @@ struct netcf_if *drv_lookup_by_name(struct netcf *ncf, const char *name) {
  * xml/augeas.rng)
  */
 static xmlDocPtr aug_get_xml(struct netcf *ncf, int nint, char **intf) {
-    struct augeas *aug;
+    augeas *aug;
     xmlDocPtr result = NULL;
     xmlNodePtr root = NULL, tree = NULL;
     char **matches = NULL;
@@ -534,7 +534,7 @@ static xmlDocPtr aug_get_xml(struct netcf *ncf, int nint, char **intf) {
 static int aug_put_xml(struct netcf *ncf, xmlDocPtr xml) {
     xmlNodePtr forest;
     char *path = NULL, *lpath = NULL, *label = NULL, *value = NULL;
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
     int result = -1;
     int r;
 
@@ -744,7 +744,7 @@ static bool is_bridge(struct netcf *ncf, const char *name) {
 }
 
 static int bridge_slaves(struct netcf *ncf, const char *name, char ***slaves) {
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
     int r, nslaves = 0;
 
     aug = get_augeas(ncf);
@@ -775,7 +775,7 @@ static int bridge_slaves(struct netcf *ncf, const char *name, char ***slaves) {
 static void rm_interface(struct netcf *ncf, const char *name) {
     int r;
     char *path = NULL;
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
 
     aug = get_augeas(ncf);
     ERR_BAIL(ncf);

@@ -1,7 +1,7 @@
 /*
  * drv_debian.c: the debian backend for netcf
  *
- * Copyright (C) 2009-2014 Red Hat Inc.
+ * Copyright (C) 2009-2015 Red Hat Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -125,7 +125,7 @@ static bool is_bridge(struct netcf *ncf, const char *name) {
 }
 
 static int interface_deps(struct netcf *ncf, char ***slaves, const char *fmt, ...) {
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
     char *path = NULL;
     int r, nslaves = 0;
     char **matches = NULL;
@@ -273,7 +273,7 @@ static bool has_config(struct netcf *ncf, const char *name) {
 static int uniq_device_names(struct netcf *ncf,
                             int ndevs, char **devs,
                             char ***intf) {
-    struct augeas *aug;
+    augeas *aug;
     int r;
     int ndevnames = 0;
     const char **devnames = NULL;
@@ -500,7 +500,7 @@ struct netcf_if *drv_lookup_by_name(struct netcf *ncf, const char *name) {
 static int aug_get_xml_for_intf(struct netcf *ncf,
                                 xmlNodePtr array,
                                 const char *name) {
-    struct augeas *aug;
+    augeas *aug;
     xmlNodePtr element = NULL, node = NULL;
     char **matches = NULL;
     char **intf = NULL;

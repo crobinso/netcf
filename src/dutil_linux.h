@@ -34,7 +34,7 @@
 #endif
 
 struct driver {
-    struct augeas     *augeas;
+    augeas     *augeas;
     xsltStylesheetPtr  put;
     xsltStylesheetPtr  get;
     int                ioctl_fd;
@@ -67,7 +67,7 @@ int remove_augeas_xfm_table(struct netcf *ncf,
                             const struct augeas_xfm_table *table);
 
 /* Get or create the augeas instance from NCF */
-struct augeas *get_augeas(struct netcf *ncf);
+augeas *get_augeas(struct netcf *ncf);
 
 /* Save changes in augeas and raise error with message on failure */
 int aug_save_assert(struct netcf *ncf);

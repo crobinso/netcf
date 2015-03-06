@@ -149,11 +149,11 @@ int remove_augeas_xfm_table(struct netcf *ncf,
 /* Get the Augeas instance; if we already initialized it, just return
  * it. Otherwise, create a new one and return that.
  */
-struct augeas *get_augeas(struct netcf *ncf) {
+augeas *get_augeas(struct netcf *ncf) {
     int r;
 
     if (ncf->driver->augeas == NULL) {
-        struct augeas *aug;
+        augeas *aug;
         char *path;
 
         r = xasprintf(&path, "%s/lenses", ncf->data_dir);
@@ -167,7 +167,7 @@ struct augeas *get_augeas(struct netcf *ncf) {
     }
 
     if (ncf->driver->copy_augeas_xfm) {
-        struct augeas *aug = ncf->driver->augeas;
+        augeas *aug = ncf->driver->augeas;
         /* Only look at a few config files */
         r = aug_rm(aug, "/augeas/load/*");
         ERR_THROW(r < 0, ncf, EOTHER, "aug_rm failed in get_augeas");
@@ -189,7 +189,7 @@ struct augeas *get_augeas(struct netcf *ncf) {
     }
 
     if (ncf->driver->load_augeas) {
-        struct augeas *aug = ncf->driver->augeas;
+        augeas *aug = ncf->driver->augeas;
 
         r = aug_load(aug);
         ERR_THROW(r < 0, ncf, EOTHER, "failed to load config files");
@@ -219,7 +219,7 @@ int aug_save_assert(struct netcf *ncf)
 {
     int r = -1;
     const char *err, *errmsg, *path = "unknown";
-    struct augeas *aug = get_augeas(ncf);
+    augeas *aug = get_augeas(ncf);
 
     ERR_BAIL(ncf);
 
@@ -259,7 +259,7 @@ int aug_save_assert(struct netcf *ncf)
 ATTRIBUTE_FORMAT(printf, 4, 5)
 int defnode(struct netcf *ncf, const char *name, const char *value,
                    const char *format, ...) {
-    struct augeas *aug = get_augeas(ncf);
+    augeas *aug = get_augeas(ncf);
     va_list ap;
     char *expr = NULL;
     int r = -1, created;
@@ -284,7 +284,7 @@ int defnode(struct netcf *ncf, const char *name, const char *value,
 
 int aug_fmt_set(struct netcf *ncf, const char *value, const char *fmt, ...)
 {
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
     char *path = NULL;
     va_list args;
     int r;
@@ -312,7 +312,7 @@ int aug_fmt_set(struct netcf *ncf, const char *value, const char *fmt, ...)
 
 int aug_fmt_rm(struct netcf *ncf, const char *fmt, ...)
 {
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
     char *path = NULL;
     va_list args;
     int r;
@@ -340,7 +340,7 @@ int aug_fmt_rm(struct netcf *ncf, const char *fmt, ...)
 }
 
 int aug_fmt_match(struct netcf *ncf, char ***matches, const char *fmt, ...) {
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
     char *path = NULL;
     va_list args;
     int r;
@@ -413,7 +413,7 @@ int aug_match_mac(struct netcf *ncf, const char *mac, char ***matches) {
 int aug_get_mac(struct netcf *ncf, const char *intf, const char **mac) {
     int r = -1;
     char *path = NULL;
-    struct augeas *aug = get_augeas(ncf);
+    augeas *aug = get_augeas(ncf);
 
     *mac = NULL;
     ERR_BAIL(ncf);
@@ -436,7 +436,7 @@ int aug_get_mac(struct netcf *ncf, const char *intf, const char **mac) {
  */
 void modprobed_alias_bond(struct netcf *ncf, const char *name) {
     char *path = NULL;
-    struct augeas *aug = get_augeas(ncf);
+    augeas *aug = get_augeas(ncf);
     int r, nmatches;
 
     ERR_BAIL(ncf);
@@ -475,7 +475,7 @@ void modprobed_alias_bond(struct netcf *ncf, const char *name) {
 /* Remove the alias for NAME to the bonding module */
 void modprobed_unalias_bond(struct netcf *ncf, const char *name) {
     char *path = NULL;
-    struct augeas *aug = get_augeas(ncf);
+    augeas *aug = get_augeas(ncf);
     int r;
 
     ERR_BAIL(ncf);

@@ -2,7 +2,7 @@
  * drv_suse.c: the suse backend for netcf
  *
  * Copyright (C) 2010 Novell Inc.
- * Copyright (C) 2009-2014 Red Hat Inc.
+ * Copyright (C) 2009-2015 Red Hat Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -141,7 +141,7 @@ static int is_slave(struct netcf *ncf, const char *intf) {
 }
 
 static bool has_ifcfg_file(struct netcf *ncf, const char *name) {
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
     char *path = NULL;
     int nmatches = 0, r;
 
@@ -251,7 +251,7 @@ static int find_hwaddr_by_device(struct netcf *ncf, const char *name,
                                  const char **addr) {
     int nmatches = 0, r;
     char **matches = NULL;
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
     char *path = NULL;
 
     aug = get_augeas(ncf);
@@ -282,7 +282,7 @@ static int find_hwaddr_by_device(struct netcf *ncf, const char *name,
  * in /etc/sysconfig/network-scripts/network-functions
  */
 static char *find_ifcfg_path(struct netcf *ncf, const char *name) {
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
     char *path = NULL;
     int r, nmatches;
 
@@ -307,7 +307,7 @@ static char *find_ifcfg_path(struct netcf *ncf, const char *name) {
 
 static int list_interfaces(struct netcf *ncf, char ***intf) {
     int nint = 0, result = 0;
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
 
     aug = get_augeas(ncf);
     ERR_BAIL(ncf);
@@ -388,7 +388,7 @@ void drv_entry(struct netcf *ncf) {
 static int list_interface_ids(struct netcf *ncf,
                               int maxnames, char **names,
                               unsigned int flags) {
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
     int nint = 0, nqualified = 0, result = 0;
     char **intf = NULL;
 
@@ -444,7 +444,7 @@ struct netcf_if *drv_lookup_by_name(struct netcf *ncf, const char *name) {
     struct netcf_if *nif = NULL;
     char *pathx = NULL;
     char *name_dup = NULL;
-    struct augeas *aug;
+    augeas *aug;
 
     aug = get_augeas(ncf);
     ERR_BAIL(ncf);
@@ -475,7 +475,7 @@ struct netcf_if *drv_lookup_by_name(struct netcf *ncf, const char *name) {
  * xml/augeas.rng)
  */
 static xmlDocPtr aug_get_xml(struct netcf_if *nif, int nint, char **intf) {
-    struct augeas *aug;
+    augeas *aug;
     xmlDocPtr result = NULL;
     xmlNodePtr root = NULL, tree = NULL;
     char **matches = NULL;
@@ -538,7 +538,7 @@ static int aug_put_xml(struct netcf *ncf, xmlDocPtr xml) {
     char *path = NULL, *lpath = NULL, *label = NULL, *value = NULL;
     char *device = NULL, *mac = NULL, *gateway = NULL;
     char **rules = NULL;
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
     int result = -1, nrules = 0, ethphysical = 0;
     int toplevel = 1;
     int r;
@@ -877,7 +877,7 @@ static bool is_bridge(struct netcf *ncf, const char *name) {
 }
 
 static int bridge_slaves(struct netcf *ncf, const char *name, char ***slaves) {
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
     int r, nslaves = 0;
 
     aug = get_augeas(ncf);
@@ -909,7 +909,7 @@ static void rm_interface(struct netcf *ncf, const char *name) {
     int r;
     char *path = NULL;
     char **rules = NULL;
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
     int nrules = 0;
 
     aug = get_augeas(ncf);
@@ -1067,7 +1067,7 @@ int drv_undefine(struct netcf_if *nif) {
 int drv_lookup_by_mac_string(struct netcf *ncf, const char *mac,
                              int maxifaces, struct netcf_if **ifaces)
 {
-    struct augeas *aug = NULL;
+    augeas *aug = NULL;
     char *path = NULL, *ifcfg = NULL;
     const char **names = NULL;
     int nmatches = 0;
