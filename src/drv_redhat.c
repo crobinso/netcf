@@ -171,9 +171,6 @@ static char *find_ifcfg_path_by_device(struct netcf *ncf, const char *name) {
     int ndevs = 0;
     char **devs = NULL;
 
-    get_augeas(ncf);
-    ERR_BAIL(ncf);
-
     ndevs = aug_fmt_match(ncf, &devs, "%s[DEVICE = '%s']",
                           ifcfg_path, name);
     ERR_COND_BAIL(ndevs < 0, ncf, EOTHER);
@@ -313,9 +310,6 @@ static int list_ifcfg_paths(struct netcf *ncf, char ***intf) {
 
 static int list_interfaces(struct netcf *ncf, char ***intf) {
     int nint = 0, result = 0;
-
-    get_augeas(ncf);
-    ERR_BAIL(ncf);
 
     /* Look in augeas for all interfaces */
     nint = list_ifcfg_paths(ncf, intf);
@@ -462,9 +456,6 @@ struct netcf_if *drv_lookup_by_name(struct netcf *ncf, const char *name) {
     struct netcf_if *nif = NULL;
     char *pathx = NULL;
     char *name_dup = NULL;
-
-    get_augeas(ncf);
-    ERR_BAIL(ncf);
 
     pathx = find_ifcfg_path(ncf, name);
     ERR_BAIL(ncf);
@@ -933,9 +924,6 @@ int drv_lookup_by_mac_string(struct netcf *ncf, const char *mac,
     int result = -1;
 
     MEMZERO(ifaces, maxifaces);
-
-    get_augeas(ncf);
-    ERR_BAIL(ncf);
 
     nmatches = aug_match_mac(ncf, mac, &matches);
     ERR_BAIL(ncf);
