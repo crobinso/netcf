@@ -966,7 +966,8 @@ static void rm_interface(struct netcf *ncf, const char *name) {
     /* The last or clause catches slaves of a bond that are enslaved to
      * a bridge NAME */
     r = xasprintf(&path, "%s/%s/ifcfg-%s",
-                  aug_files, network_scripts_path, name);
+                  aug_files, network_scripts_path,
+                  escaped_name ? escaped_name : name);
     ERR_NOMEM(r < 0, ncf);
 
     r = aug_rm(aug, path);
