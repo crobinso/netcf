@@ -1,7 +1,7 @@
 /*
  * internal.h: importantdefinitions used through netcf
  *
- * Copyright (C) 2009 Red Hat Inc.
+ * Copyright (C) 2009-2011, 2015 Red Hat Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -84,9 +84,6 @@
 #define ATTRIBUTE_NOINLINE
 #endif                                   /* __GNUC__ */
 
-#ifndef WIN32
-#define DATADIR NETCF_DATADIR
-#endif
 /* This needs ATTRIBUTE_RETURN_CHECK */
 #include "ref.h"
 
