@@ -129,15 +129,30 @@ static const char *const subif_paths[] = {
     "BONDING_MASTER", "BRIDGE"
 };
 
-static int is_slave(struct netcf *ncf, const char *intf) {
+static int is_slave(struct netcf *ncf, const char *intf)
+{
+    augeas *aug = NULL;
+    char *escaped_intf = NULL;
+    int r = 0;
+
+    aug = get_augeas(ncf);
+    ERR_BAIL(ncf);
+
+    r = aug_escape_name_wrap(ncf, aug, intf, &escaped_intf);
+    ERR_NOMEM(r < 0, ncf);
+
     for (int s = 0; s < ARRAY_CARDINALITY(subif_paths); s++) {
-        int r;
         r = aug_fmt_match(ncf, NULL, "%s%s/ifcfg-%s/%s",
-                          aug_files, network_scripts_path, intf, subif_paths[s]);
+                          aug_files, network_scripts_path,
+                          escaped_intf ? escaped_intf : intf,
+                          subif_paths[s]);
         if (r != 0)
-            return r;
+            goto cleanup;
     }
-    return 0;
+ cleanup:
+ error:
+    FREE(escaped_intf);
+    return r;
 }
 
 static bool has_ifcfg_file(struct netcf *ncf, const char *name) {
@@ -485,6 +500,7 @@ struct netcf_if *drv_lookup_by_name(struct netcf *ncf, const char *name) {
  */
 static xmlDocPtr aug_get_xml(struct netcf_if *nif, int nint, char **intf) {
     augeas *aug;
+    char *escaped_intf = NULL;
     xmlDocPtr result = NULL;
     xmlNodePtr root = NULL, tree = NULL;
     char **matches = NULL;
@@ -503,8 +519,14 @@ static xmlDocPtr aug_get_xml(struct netcf_if *nif, int nint, char **intf) {
     for (int i=0; i < nint; i++) {
         tree = xmlNewChild(root, NULL, BAD_CAST "tree", NULL);
         xmlNewProp(tree, BAD_CAST "path", BAD_CAST intf[i]);
+
+        FREE(escaped_intf);
+        r = aug_escape_name_wrap(ncf, aug, intf[i], &escaped_intf);
+        ERR_NOMEM(r < 0, ncf);
+
         nmatches = aug_fmt_match(ncf, &matches, "%s%s/ifcfg-%s/%s",
-                                 aug_files, network_scripts_path, intf[i], "*");
+                                 aug_files, network_scripts_path,
+                                 escaped_intf ? escaped_intf : intf[i], "*");
         ERR_COND_BAIL(nint < 0, ncf, EOTHER);
         for (int j = 0; j < nmatches; j++) {
             xmlNodePtr node = xmlNewChild(tree, NULL, BAD_CAST "node", NULL);
@@ -533,11 +555,13 @@ static xmlDocPtr aug_get_xml(struct netcf_if *nif, int nint, char **intf) {
         free_matches(nmatches, &matches);
     }
 
+    FREE(escaped_intf);
     return result;
 
  error:
     free_matches(nmatches, &matches);
     xmlFreeDoc(result);
+    FREE(escaped_intf);
     return NULL;
 }
 
@@ -877,11 +901,22 @@ static bool is_bond(struct netcf *ncf, const char *name) {
 
 /* The device NAME is a bridge if it has an entry TYPE=Bridge */
 static bool is_bridge(struct netcf *ncf, const char *name) {
+    augeas *aug;
+    char *escaped_name = NULL;
     int nmatches = 0;
+
+    aug = get_augeas(ncf);
+    ERR_BAIL(ncf);
+
+    r = aug_escape_name_wrap(ncf, aug, name, &escaped_name);
+    ERR_NOMEM(r < 0, ncf);
 
     nmatches = aug_fmt_match(ncf, NULL,
                              "%s%s/ifcfg-%s[ BRIDGE = 'yes' ]",
-                             aug_files, network_scripts_path, name);
+                             aug_files, network_scripts_path,
+                             escaped_name ? escaped_name : name);
+ error:
+    FREE(escaped_name);
     return nmatches > 0;
 }
 
@@ -919,10 +954,14 @@ static void rm_interface(struct netcf *ncf, const char *name) {
     char *path = NULL;
     char **rules = NULL;
     augeas *aug = NULL;
+    char *escaped_name = NULL;
     int nrules = 0;
 
     aug = get_augeas(ncf);
     ERR_BAIL(ncf);
+
+    r = aug_escape_name_wrap(ncf, aug, name, &escaped_name);
+    ERR_NOMEM(r < 0, ncf);
 
     /* The last or clause catches slaves of a bond that are enslaved to
      * a bridge NAME */
@@ -934,7 +973,8 @@ static void rm_interface(struct netcf *ncf, const char *name) {
     ERR_COND_BAIL(r < 0, ncf, EOTHER);
 
     nrules = aug_fmt_match(ncf, &rules, "%s/%s/%s",
-                           aug_files, udev_netrule_path, name);
+                           aug_files, udev_netrule_path,
+                           escaped_name ? escaped_name : name);
     ERR_COND_BAIL(nrules < 0, ncf, EINTERNAL);
 
     while(nrules > 0) {
@@ -944,6 +984,7 @@ static void rm_interface(struct netcf *ncf, const char *name) {
     free_matches(nrules, &rules);
 
  error:
+    FREE(escaped_name);
     FREE(path);
 }
 
