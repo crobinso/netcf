@@ -148,7 +148,7 @@ static char *find_ifcfg_path_by_hwaddr(struct netcf *ncf, const char *mac) {
     for (int i=0; i < nhwaddr; i++) {
         const char *addr;
         r = aug_get(aug, hwaddr[i], &addr);
-        ERR_COND_BAIL(r != 1, ncf, EOTHER);
+        ERR_COND_BAIL(r != 1 || !addr, ncf, EOTHER);
         if (STRCASEEQ(addr, mac))
             match = i;
     }
@@ -257,7 +257,7 @@ static int uniq_ifcfg_paths(struct netcf *ncf,
     for (int i=0; i < ndevs; i++) {
         const char *name = NULL;
         r = aug_get(aug, devs[i], &name);
-        ERR_COND_BAIL(r != 1, ncf, EOTHER);
+        ERR_COND_BAIL(r != 1 || !name, ncf, EOTHER);
         int exists = 0;
         for (int j = 0; j < ndevnames; j++)
             if (STREQ(name, devnames[j])) {
@@ -414,7 +414,7 @@ static int list_interface_ids(struct netcf *ncf,
                                 == (NETCF_IFACE_ACTIVE|NETCF_IFACE_INACTIVE));
 
             r = aug_get(aug, matches[nmatches-1], &name);
-            ERR_COND_BAIL(r < 0, ncf, EOTHER);
+            ERR_COND_BAIL(r != 1 || !name, ncf, EOTHER);
 
             if (!is_qualified) {
                 int is_active = if_is_active(ncf, name);
@@ -507,7 +507,7 @@ static xmlDocPtr aug_get_xml(struct netcf *ncf, int nint, char **intf) {
             xmlNewProp(node, BAD_CAST "label",
                        BAD_CAST matches[j] + strlen(intf[i]) + 1);
             r = aug_get(aug, matches[j], &value);
-            ERR_COND_BAIL(r < 0, ncf, EOTHER);
+            ERR_COND_BAIL(r != 1 || !value, ncf, EOTHER);
             xmlNewProp(node, BAD_CAST "value", BAD_CAST value);
         }
         free_matches(nmatches, &matches);
@@ -748,7 +748,7 @@ static int bridge_slaves(struct netcf *ncf, const char *name, char ***slaves) {
         char *p = (*slaves)[i];
         const char *dev;
         r = aug_get(aug, p, &dev);
-        ERR_COND_BAIL(r < 0, ncf, EOTHER);
+        ERR_COND_BAIL(r != 1 || !dev, ncf, EOTHER);
 
         (*slaves)[i] = strdup(dev);
         free(p);

@@ -503,7 +503,7 @@ static xmlDocPtr aug_get_xml(struct netcf_if *nif, int nint, char **intf) {
             xmlNewProp(node, BAD_CAST "label",
                        BAD_CAST matches[j] + pathoffset + strlen(intf[i]) + 1);
             r = aug_get(aug, matches[j], &value);
-            ERR_COND_BAIL(r < 0, ncf, EOTHER);
+            ERR_COND_BAIL(r != 1 || !value, ncf, EOTHER);
             xmlNewProp(node, BAD_CAST "value", BAD_CAST value);
         }
         {
@@ -514,7 +514,7 @@ static xmlDocPtr aug_get_xml(struct netcf_if *nif, int nint, char **intf) {
         }
         {
             const char *mac = NULL;
-            if( find_hwaddr_by_device(ncf, nif->name, &mac) > 0 ) {
+            if(find_hwaddr_by_device(ncf, nif->name, &mac) > 0 && mac) {
                 xmlNodePtr node = xmlNewChild(tree, NULL, BAD_CAST "node", NULL);
                 xmlNewProp(node, BAD_CAST "label",
                            BAD_CAST "HWADDR" );
@@ -890,7 +890,7 @@ static int bridge_slaves(struct netcf *ncf, const char *name, char ***slaves) {
         char *p = (*slaves)[i];
         const char *dev;
         r = aug_get(aug, p, &dev);
-        ERR_COND_BAIL(r < 0, ncf, EOTHER);
+        ERR_COND_BAIL(r != 1 || !dev, ncf, EOTHER);
 
         (*slaves)[i] = strdup(dev);
         free(p);

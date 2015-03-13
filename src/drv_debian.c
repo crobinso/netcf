@@ -156,7 +156,7 @@ static int interface_deps(struct netcf *ncf, char ***slaves, const char *fmt, ..
         r = aug_get(aug, matches[i], &devs);
         ERR_COND_BAIL(r < 0, ncf, EOTHER);
 
-        if (strcmp(devs, "none") == 0)
+        if (r != 1 || !devs || STREQ(devs, "none"))
             continue;
 
         do {
@@ -288,7 +288,7 @@ static int uniq_device_names(struct netcf *ncf,
     for (int i=0; i < ndevs; i++) {
         const char *name = NULL;
         r = aug_get(aug, devs[i], &name);
-        ERR_COND_BAIL(r != 1, ncf, EOTHER);
+        ERR_COND_BAIL(r != 1 || !name, ncf, EOTHER);
         int exists = 0;
         for (int j = 0; j < ndevnames; j++)
             if (STREQ(name, devnames[j])) {
@@ -528,7 +528,7 @@ static int aug_get_xml_for_intf(struct netcf *ncf,
             xmlNewProp(node, BAD_CAST "label",
                        BAD_CAST matches[j] + strlen(intf[i]) + 1);
             r = aug_get(aug, matches[j], &value);
-            ERR_COND_BAIL(r < 0, ncf, EOTHER);
+            ERR_COND_BAIL(r != 1 || !value, ncf, EOTHER);
             xmlNewProp(node, BAD_CAST "value", BAD_CAST value);
         }
 
