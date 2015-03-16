@@ -183,8 +183,7 @@
     <xsl:variable name="uses_dhcp"
                   select="node[@label = 'BOOTPROTO']/@value = 'dhcp'"/>
     <xsl:variable name="uses_static"
-                  select="count(node[@label = 'IPADDR']) +
-                          count(node[@label = 'IPADDR0']) > 0"/>
+                  select="count(node[substring(@label,1,6) = 'IPADDR']) > 0"/>
     <xsl:variable name="uses_ipv4" select="$uses_dhcp or $uses_static"/>
     <xsl:if test="$uses_ipv4">
     <protocol family="ipv4">
@@ -197,6 +196,7 @@
           </dhcp>
         </xsl:when>
         <xsl:when test="$uses_static">
+          <!-- IPADDR and IPADDR0 must be treated differently from IPADDR1 - IPADDR99 -->
           <xsl:choose>
             <xsl:when test="node[@label = 'IPADDR']">
               <ip address="{node[@label = 'IPADDR']/@value}">
@@ -217,6 +217,25 @@
               <route gateway="{node[@label = 'GATEWAY0']/@value}"/>
             </xsl:when>
           </xsl:choose>
+          <xsl:for-each select="node[substring(@label, 1, 6) = 'IPADDR']">
+            <xsl:variable name="index" select="substring(@label, 7, 3)"/>
+            <xsl:if test="number($index) > 0 and number($index) &lt; 100">
+              <ip address="{@value}">
+                <xsl:choose>
+                  <xsl:when test="../node[@label = concat('PREFIX', $index)]">
+                    <xsl:attribute name="prefix">
+                      <xsl:value-of select="../node[@label = concat('PREFIX', $index)]/@value"/>
+                    </xsl:attribute>
+                  </xsl:when>
+                  <xsl:when test="../node[@label = concat('NETMASK', $index)]">
+                    <xsl:attribute name="prefix">
+                      <xsl:value-of select="ipcalc:prefix(../node[@label = concat('NETMASK', $index)]/@value)"/>
+                    </xsl:attribute>
+                  </xsl:when>
+                </xsl:choose>
+              </ip>
+            </xsl:if>
+          </xsl:for-each>
         </xsl:when>
       </xsl:choose>
     </protocol>

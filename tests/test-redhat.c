@@ -1,7 +1,7 @@
 /*
  * test-redhat.c:
  *
- * Copyright (C) 2009 Red Hat Inc.
+ * Copyright (C) 2009, 2011, 2015 Red Hat Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -43,7 +43,7 @@ static void testListInterfaces(CuTest *tc) {
     int nint;
     char **names;
     static const char *const exp_names[] =
-        { "br0", "bond0", "lo", "eth3", "eth4" };
+        { "br0", "br1", "bond0", "lo", "eth3", "eth4" };
     static const int exp_nint = ARRAY_CARDINALITY(exp_names);
 
     nint = ncf_num_of_interfaces(ncf, NETCF_IFACE_ACTIVE|NETCF_IFACE_INACTIVE);
@@ -180,6 +180,7 @@ static void testTransforms(CuTest *tc) {
     assert_transforms(tc, "bridge-vlan");
     assert_transforms(tc, "bridge-empty");
     assert_transforms(tc, "bridge-bond");
+    assert_transforms(tc, "bridge-multi");
     assert_transforms(tc, "ethernet-static");
     assert_transforms(tc, "ethernet-static-no-prefix");
     assert_transforms(tc, "ethernet-dhcp");

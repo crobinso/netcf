@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<forest>
+  <tree path="/files/etc/sysconfig/network-scripts/ifcfg-br1">
+    <node label="DEVICE" value="br1"/>
+    <node label="ONBOOT" value="yes"/>
+    <node label="TYPE" value="Bridge"/>
+    <node label="BOOTPROTO" value="none"/>
+    <node label="IPADDR" value="10.0.0.1"/>
+    <node label="NETMASK" value="255.255.255.0"/>
+    <node label="IPADDR1" value="192.168.125.4"/>
+    <node label="NETMASK1" value="255.255.255.0"/>
+    <node label="IPADDR2" value="192.168.125.5"/>
+    <node label="NETMASK2" value="255.255.255.254"/>
+    <node label="IPADDR3" value="192.168.125.6"/>
+    <node label="IPADDR4" value="192.168.125.7"/>
+    <node label="IPADDR5" value="192.168.125.8"/>
+    <node label="IPADDR6" value="192.168.125.9"/>
+    <node label="IPADDR7" value="192.168.125.10"/>
+    <node label="IPADDR8" value="172.16.20.32"/>
+    <node label="NETMASK8" value="255.240.0.0"/>
+    <node label="STP" value="on"/>
+    <node label="DELAY" value="0"/>
+  </tree>
+</forest>

@@ -191,16 +191,33 @@
       </xsl:when>
       <xsl:when test="ip">
         <node label="BOOTPROTO" value="none"/>
-        <node label="IPADDR" value="{ip/@address}"/>
-        <xsl:if test="ip/@prefix">
-          <node label="NETMASK" value="{ipcalc:netmask(ip/@prefix)}"/>
-        </xsl:if>
+        <xsl:for-each select="ip">
+          <xsl:if test="position() = 1">
+            <xsl:call-template name="ipv4-address">
+              <xsl:with-param name="index"/>
+            </xsl:call-template>
+          </xsl:if>
+          <xsl:if test="position() > 1 and position() &lt; 101">
+            <xsl:call-template name="ipv4-address">
+              <xsl:with-param name="index" select="position() - 1"/>
+            </xsl:call-template>
+          </xsl:if>
+        </xsl:for-each>
         <xsl:if test="route">
           <node label="GATEWAY" value="{route/@gateway}"/>
         </xsl:if>
       </xsl:when>
     </xsl:choose>
   </xsl:template>
+
+  <xsl:template name="ipv4-address">
+    <xsl:param name="index"/>
+    <node label="IPADDR{$index}" value="{@address}"/>
+    <xsl:if test="@prefix">
+      <node label="NETMASK{$index}" value="{ipcalc:netmask(@prefix)}"/>
+    </xsl:if>
+  </xsl:template>
+
 
   <xsl:template name="protocol-ipv6">
     <node label="IPV6INIT" value="yes"/>
