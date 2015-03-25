@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:ipcalc = "http://redhat.com/xslt/netcf/ipcalc/1.0"
+                xmlns:pathcomponent = "http://redhat.com/xslt/netcf/pathcomponent/1.0"
                 extension-element-prefixes="ipcalc"
                 version="1.0">
 
@@ -45,7 +46,7 @@
   </xsl:template>
 
   <xsl:template name="vlan-interface-common">
-    <xsl:variable name="iface" select="concat(vlan/interface/@name, '.', vlan/@tag)"/>
+    <xsl:variable name="iface" select="pathcomponent:escape(concat(vlan/interface/@name, '.', vlan/@tag))"/>
 
     <xsl:attribute name="path">/files/etc/sysconfig/network/ifcfg-<xsl:value-of select="$iface"/></xsl:attribute>
     <node label="DEVICE" value="{$iface}"/>
@@ -149,7 +150,7 @@
        Named templates, following the Relax NG syntax
   -->
   <xsl:template name="name-attr">
-    <xsl:attribute name="path">/files/etc/sysconfig/network/ifcfg-<xsl:value-of select="@name"/></xsl:attribute>
+    <xsl:attribute name="path">/files/etc/sysconfig/network/ifcfg-<xsl:value-of select="pathcomponent:escape(@name)"/></xsl:attribute>
     <node label="DEVICE" value="{@name}"/>
   </xsl:template>
 

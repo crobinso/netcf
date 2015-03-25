@@ -1,7 +1,7 @@
 /*
  * xslt_ext.c: XSLT extension functions needed by the stylesheets
  *
- * Copyright (C) 2009, 2014 Red Hat Inc.
+ * Copyright (C) 2009, 2014, 2015 Red Hat Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -37,6 +37,8 @@
     (BAD_CAST "http://redhat.com/xslt/netcf/ipcalc/1.0")
 #define XSLT_EXT_BOND_NS                                \
     (BAD_CAST "http://redhat.com/xslt/netcf/bond/1.0")
+#define XSLT_EXT_PATHCOMPONENT_NS                       \
+    (BAD_CAST "http://redhat.com/xslt/netcf/pathcomponent/1.0")
 
 /* Given an IP prefix like "24", compute the netmask "255.255.255.0"
  */
@@ -175,6 +177,43 @@ static void bond_option(xmlXPathParserContextPtr ctxt, int nargs) {
     xmlFree(bond_opts);
 }
 
+
+static void
+pathcomponent_escape(xmlXPathParserContextPtr ctxt, int nargs) {
+    xmlChar *orig_xmlstr = NULL;
+    char *escaped_str = NULL;
+    int r;
+
+    if (nargs != 1) {
+        xmlXPathSetArityError(ctxt);
+        goto error;
+    }
+
+    orig_xmlstr = xmlXPathPopString(ctxt);
+    if (xmlStrlen(orig_xmlstr) == 0) {
+        xmlXPathReturnEmptyString(ctxt);
+        goto error;
+    }
+
+    r = aug_escape_name_base((const char *)orig_xmlstr, &escaped_str);
+    if (r < 0) {
+        xsltTransformError(xsltXPathGetTransformContext(ctxt), NULL, NULL,
+                           "pathcomponent:escape: Out of Memory");
+        goto error;
+    }
+
+    if (escaped_str)
+        xmlXPathReturnString(ctxt, BAD_CAST escaped_str);
+    else
+        xmlXPathReturnString(ctxt, xmlStrdup(orig_xmlstr));
+    escaped_str = NULL;
+ error:
+    xmlFree(orig_xmlstr);
+    free(escaped_str);
+    return;
+}
+
+
 int xslt_register_exts(xsltTransformContextPtr ctxt) {
     int r;
 
@@ -193,6 +232,11 @@ int xslt_register_exts(xsltTransformContextPtr ctxt) {
     if (r < 0)
         return r;
 
+    r = xsltRegisterExtFunction(ctxt, BAD_CAST "escape",
+                                XSLT_EXT_PATHCOMPONENT_NS,
+                                pathcomponent_escape);
+    if (r < 0)
+        return r;
     return 0;
 }
 
