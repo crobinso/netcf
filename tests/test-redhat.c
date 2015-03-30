@@ -43,7 +43,7 @@ static void testListInterfaces(CuTest *tc) {
     int nint;
     char **names;
     static const char *const exp_names[] =
-        { "br0", "br1", "bond0", "lo", "eth3", "eth4" };
+        { "br0", "br1", "br2", "bond0", "lo", "eth3", "eth4" };
     static const int exp_nint = ARRAY_CARDINALITY(exp_names);
 
     nint = ncf_num_of_interfaces(ncf, NETCF_IFACE_ACTIVE|NETCF_IFACE_INACTIVE);
@@ -181,6 +181,7 @@ static void testTransforms(CuTest *tc) {
     assert_transforms(tc, "bridge-empty");
     assert_transforms(tc, "bridge-bond");
     assert_transforms(tc, "bridge-multi");
+    assert_transforms(tc, "bridge-multi-all");
     assert_transforms(tc, "ethernet-static");
     assert_transforms(tc, "ethernet-static-no-prefix");
     assert_transforms(tc, "ethernet-dhcp");

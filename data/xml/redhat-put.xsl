@@ -186,16 +186,15 @@
                   select="count(node[substring(@label,1,6) = 'IPADDR']) > 0"/>
     <xsl:variable name="uses_ipv4" select="$uses_dhcp or $uses_static"/>
     <xsl:if test="$uses_ipv4">
-    <protocol family="ipv4">
-      <xsl:choose>
-        <xsl:when test="$uses_dhcp">
+      <protocol family="ipv4">
+        <xsl:if test="$uses_dhcp">
           <dhcp>
             <xsl:if test="node[@label = 'PEERDNS']">
               <xsl:attribute name="peerdns"><xsl:value-of select="node[@label = 'PEERDNS']/@value"></xsl:value-of></xsl:attribute>
             </xsl:if>
           </dhcp>
-        </xsl:when>
-        <xsl:when test="$uses_static">
+        </xsl:if>
+        <xsl:if test="$uses_static">
           <!-- IPADDR and IPADDR0 must be treated differently from IPADDR1 - IPADDR99 -->
           <xsl:choose>
             <xsl:when test="node[@label = 'IPADDR']">
@@ -236,9 +235,8 @@
               </ip>
             </xsl:if>
           </xsl:for-each>
-        </xsl:when>
-      </xsl:choose>
-    </protocol>
+        </xsl:if>
+      </protocol>
     </xsl:if>
   </xsl:template>
 

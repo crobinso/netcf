@@ -183,32 +183,32 @@
   </xsl:template>
 
   <xsl:template name="protocol-ipv4">
-    <xsl:choose>
-      <xsl:when test="dhcp">
-        <node label="BOOTPROTO" value="dhcp"/>
-        <xsl:if test="dhcp/@peerdns">
-          <node label="PEERDNS" value="{dhcp/@peerdns}"/>
+    <xsl:if test="count(dhcp) > 0">
+      <node label="BOOTPROTO" value="dhcp"/>
+      <xsl:if test="dhcp/@peerdns">
+        <node label="PEERDNS" value="{dhcp/@peerdns}"/>
+      </xsl:if>
+    </xsl:if>
+    <xsl:if test="count(dhcp) = 0">
+      <node label="BOOTPROTO" value="none"/>
+    </xsl:if>
+    <xsl:if test="count(ip) > 0">
+      <xsl:for-each select="ip">
+        <xsl:if test="position() = 1">
+          <xsl:call-template name="ipv4-address">
+            <xsl:with-param name="index"/>
+          </xsl:call-template>
         </xsl:if>
-      </xsl:when>
-      <xsl:when test="ip">
-        <node label="BOOTPROTO" value="none"/>
-        <xsl:for-each select="ip">
-          <xsl:if test="position() = 1">
-            <xsl:call-template name="ipv4-address">
-              <xsl:with-param name="index"/>
-            </xsl:call-template>
-          </xsl:if>
-          <xsl:if test="position() > 1 and position() &lt; 101">
-            <xsl:call-template name="ipv4-address">
-              <xsl:with-param name="index" select="position() - 1"/>
-            </xsl:call-template>
-          </xsl:if>
-        </xsl:for-each>
-        <xsl:if test="route">
-          <node label="GATEWAY" value="{route/@gateway}"/>
+        <xsl:if test="position() > 1 and position() &lt; 101">
+          <xsl:call-template name="ipv4-address">
+            <xsl:with-param name="index" select="position() - 1"/>
+          </xsl:call-template>
         </xsl:if>
-      </xsl:when>
-    </xsl:choose>
+      </xsl:for-each>
+      <xsl:if test="route">
+        <node label="GATEWAY" value="{route/@gateway}"/>
+      </xsl:if>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="ipv4-address">

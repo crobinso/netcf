@@ -1,0 +1,23 @@
+<interface type="bridge" name="br2">
+  <start mode="onboot"/>
+  <protocol family="ipv4">
+    <dhcp peerdns="yes"/>
+    <ip address="10.0.0.1" prefix="24"/>
+    <ip address="192.168.125.4" prefix="24"/>
+    <ip address="192.168.125.5" prefix="31"/>
+    <ip address="192.168.125.6"/>
+    <ip address="192.168.125.7"/>
+    <ip address="192.168.125.8"/>
+    <ip address="192.168.125.9"/>
+    <ip address="192.168.125.10"/>
+    <ip address="172.16.20.32" prefix="12"/>
+  </protocol>
+  <protocol family="ipv6">
+    <autoconf/>
+    <dhcp/>
+    <ip address="3ffe:ffff:0:5::1" prefix="128"/>
+    <ip address="3ffe:ffff:0:5::3" prefix="128"/>
+    <ip address="3ffe:ffff:0:5::5" prefix="128"/>
+  </protocol>
+  <bridge stp="on" delay="0"/>
+</interface>
