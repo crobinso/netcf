@@ -1,3 +1,12 @@
+0.2.7 - 2015-04-03
+ - resolve CVE-2014-8119
+ - support multiple IPv4 addresses in interface config (redhat driver)
+ - allow static IPv4 config simultaneous with DHCPv4 (redhat driver)
+ - recognize IPADDR0/NETMASK0/PREFIX0
+ - remove extra quotes from IPV6ADDR_SECONDARIES (redhat+suse drivers)
+ - miscellaneous systemd service fixes
+ - use git to apply patches in rpm specfile
+
 0.2.6 - 2014-08-22
  - allow interleaved elements in interface XML schema
  - allow <link> element in vlan and bond interfaces

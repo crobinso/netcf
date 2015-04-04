@@ -212,6 +212,15 @@ fi
 %{_libdir}/pkgconfig/netcf.pc
 
 %changelog
+* Fri Apr 03 2015 Laine Stump <laine@redhat.com> - 0.2.7-1
+ - resolve CVE-2014-8119
+ - support multiple IPv4 addresses in interface config (redhat driver)
+ - allow static IPv4 config simultaneous with DHCPv4 (redhat driver)
+ - recognize IPADDR0/NETMASK0/PREFIX0
+ - remove extra quotes from IPV6ADDR_SECONDARIES (redhat+suse drivers)
+ - miscellaneous systemd service fixes
+ - use git to apply patches in rpm specfile
+
 * Fri Aug 22 2014 Laine Stump <laine@redhat.com> - 0.2.6-1
  - allow interleaved elements in interface XML schema
  - allow <link> element in vlan and bond interfaces
