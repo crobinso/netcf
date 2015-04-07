@@ -54,8 +54,8 @@
 #include "dutil.h"
 #include "dutil_linux.h"
 
-#ifndef HAVE_LIBNL3
-#include <net/if.h>
+#ifndef AVOID_NET_IF_H
+# include <net/if.h>
 #endif
 #include <netlink/socket.h>
 #include <netlink/cache.h>

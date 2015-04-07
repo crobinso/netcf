@@ -162,9 +162,29 @@ then
 	fi
 
 	if (test "${have_libnl3}" = "yes" -a "${have_libnl_route3}" = "yes"); then
-		AC_DEFINE([HAVE_LIBNL3], [1], [Use libnl-3.0])
-		have_libnl="yes"
-	else
+            AC_DEFINE([HAVE_LIBNL3], [1], [Use libnl-3.0])
+            have_libnl="yes"
+            SAVE_CFLAGS="${CFLAGS}"
+            CFLAGS="${LIBNL_CFLAGS} ${CFLAGS}"
+            dnl Avoid #including net/if.h when using earlier versions
+            dnl of libnl3 that include linux/if.h from netlink/route/link.h,
+            dnl since the two if.h files conflict with each other.
+            AC_CACHE_CHECK(
+                [whether to avoid including <net/if.h> to prevent conflict with <linux/if.h> included by libnl3],
+                [netcf_cv_avoid_net_if_h],
+                [AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+                    [[
+                      #include <netlink/route/link.h>
+                    ]],
+                    [[struct ifreq ifr; return ifr.ifr_ifru.ifru_ivalue = IFF_UP;]])],
+                    [netcf_cv_avoid_net_if_h=yes], [netcf_cv_avoid_net_if_h=no])])
+                CFLAGS="${SAVE_CFLAGS}"
+                if test "x$netcf_cv_avoid_net_if_h" = "xyes"; then
+                   AC_DEFINE([AVOID_NET_IF_H], [1],
+                             [define to 1 if the libnl3 header netlink/route/link.h already
+                              includes linux/if.h (which will conflict with net/if.h)])
+                fi
+        else
 		PKG_CHECK_MODULES([LIBNL], [libnl-1],
 				  [have_libnl1=yes],
 				  [have_libnl1=no])
