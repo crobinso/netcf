@@ -1,3 +1,7 @@
+0.2.8 - 2015-04-08
+- Fix build on systems with newer libnl3 that doesn't
+   #include <linux/if.h>
+
 0.2.7 - 2015-04-03
  - resolve CVE-2014-8119
  - support multiple IPv4 addresses in interface config (redhat driver)

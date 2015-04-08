@@ -212,6 +212,10 @@ fi
 %{_libdir}/pkgconfig/netcf.pc
 
 %changelog
+* Mon Apr 08 2015 Laine Stump <laine@redhat.com> - 0.2.8-1
+ - Fix build on systems with newer libnl3 that doesn't
+   #include <linux/if.h>
+
 * Fri Apr 03 2015 Laine Stump <laine@redhat.com> - 0.2.7-1
  - resolve CVE-2014-8119
  - support multiple IPv4 addresses in interface config (redhat driver)
