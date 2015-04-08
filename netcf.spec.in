@@ -212,7 +212,7 @@ fi
 %{_libdir}/pkgconfig/netcf.pc
 
 %changelog
-* Mon Apr 08 2015 Laine Stump <laine@redhat.com> - 0.2.8-1
+* Wed Apr 08 2015 Laine Stump <laine@redhat.com> - 0.2.8-1
  - Fix build on systems with newer libnl3 that doesn't
    #include <linux/if.h>
 
