@@ -41,7 +41,6 @@
         </element>
       </optional>
       <ref name="link-speed-state"/>
-      <empty/>
       <!-- FIXME: Allow (some) ethtool options -->
     </interleave>
   </define>
@@ -489,6 +488,7 @@
         <optional>
           <attribute name="state"><ref name="link-state"/></attribute>
         </optional>
+        <empty/>
       </element>
     </optional>
   </define>
