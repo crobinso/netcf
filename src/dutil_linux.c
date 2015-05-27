@@ -1055,9 +1055,6 @@ static void add_bond_info_cb(struct nl_object *obj,
         || rtnl_link_get_master(iflink) != cb_data->master_ifindex)
         return;
 
-    cb_data->bond = xml_node(cb_data->doc, cb_data->root, "bond");
-    ERR_NOMEM(cb_data->bond == NULL, ncf);
-
     /* XXX - if we learn where to get bridge "mode" property, set it here */
 
     /* XXX - need to add node like one of these:
@@ -1089,7 +1086,13 @@ static void add_bond_info(struct netcf *ncf,
     if (ifindex == RTNL_LINK_NOT_FOUND)
         return;
 
+    cb_data.bond = xml_node(doc, root, "bond");
+    ERR_NOMEM(cb_data.bond == NULL, ncf);
+
     nl_cache_foreach(ncf->driver->link_cache, add_bond_info_cb, &cb_data);
+
+error:
+    return;
 }
 
 
