@@ -41,6 +41,7 @@ struct driver {
     struct nl_sock     *nl_sock;
     struct nl_cache   *link_cache;
     struct nl_cache   *addr_cache;
+    time_t             load_augeas_time;
     unsigned int       load_augeas : 1;
     unsigned int       copy_augeas_xfm : 1;
     unsigned int       augeas_xfm_num_tables;

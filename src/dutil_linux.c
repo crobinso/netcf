@@ -32,6 +32,7 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <errno.h>
+#include <time.h>
 
 #include <dirent.h>
 #include <sys/wait.h>
@@ -151,6 +152,7 @@ int remove_augeas_xfm_table(struct netcf *ncf,
  */
 augeas *get_augeas(struct netcf *ncf) {
     int r;
+    time_t current_time;
 
     if (ncf->driver->augeas == NULL) {
         augeas *aug;
@@ -186,9 +188,12 @@ augeas *get_augeas(struct netcf *ncf) {
         }
         ncf->driver->copy_augeas_xfm = 0;
         ncf->driver->load_augeas = 1;
+        ncf->driver->load_augeas_time = 0;
     }
 
-    if (ncf->driver->load_augeas) {
+    current_time = time(NULL);
+    if (ncf->driver->load_augeas &&
+        ncf->driver->load_augeas_time != current_time) {
         augeas *aug = ncf->driver->augeas;
 
         r = aug_load(aug);
@@ -207,6 +212,7 @@ augeas *get_augeas(struct netcf *ncf) {
         }
         ERR_THROW(r > 0, ncf, EOTHER, "errors in loading some config files");
         ncf->driver->load_augeas = 0;
+        ncf->driver->load_augeas_time = current_time;
     }
     return ncf->driver->augeas;
  error:
