@@ -88,6 +88,38 @@ static const struct augeas_xfm_table augeas_xfm_common =
     { .size = ARRAY_CARDINALITY(augeas_xfm_common_pv),
       .pv = augeas_xfm_common_pv };
 
+/* aug_all_related_ifcfgs() - return the count of (and optionally a list
+ * of, if matches != NULL) the paths for all ifcfg files that are
+ * related to the interface "name".
+ */
+static
+int aug_all_related_ifcfgs(struct netcf *ncf, char ***matches, const char *name) {
+    int nmatches;
+
+    /* this includes the ifcfg files for:
+     *
+     * 1) the named interface itself (DEVICE=$name)
+     *
+     * 2) any interface naming $name as a bridge it is attached to
+     *    (BRIDGE=$name)
+     *
+     * 3) any interface naming $name as the master of a bond it is
+     *    enslaved to (MASTER=$name)
+     *
+     * 4) any interface with a MASTER, where the device named as
+     *    MASTER contains a BRIDGE=$name *and* DEVICE=$itself (thus
+     *    catching ethernet devices that are enslaved to a bond that
+     *    is attached to a bridge).
+     */
+    nmatches = aug_fmt_match(ncf, matches,
+                             "(%s[(DEVICE|BRIDGE|MASTER) = '%s']"
+                             "|%s[MASTER][MASTER = ../*[BRIDGE = '%s']/DEVICE "
+                             "])/DEVICE",
+                             ifcfg_path, name, ifcfg_path, name);
+    return nmatches;
+
+}
+
 /* Entries in a ifcfg file that tell us that the interface
  * is not a toplevel interface
  */
@@ -108,12 +140,7 @@ static int is_slave(struct netcf *ncf, const char *intf) {
 static bool has_ifcfg_file(struct netcf *ncf, const char *name) {
     int nmatches;
 
-    nmatches = aug_fmt_match(ncf, NULL,
-                             "%s[ DEVICE = '%s'"
-                             "    or BRIDGE = '%s'"
-                             "    or MASTER = '%s'"
-                             "    or MASTER = ../*[BRIDGE = '%s']/DEVICE ]/DEVICE",
-                             ifcfg_path, name, name, name, name);
+    nmatches = aug_all_related_ifcfgs(ncf, NULL, name);
     return nmatches > 0;
 }
 
@@ -588,10 +615,7 @@ static xmlDocPtr aug_get_xml_for_nif(struct netcf_if *nif) {
     int ndevs = 0, nint = 0;
 
     ncf = nif->ncf;
-    ndevs = aug_fmt_match(ncf, &devs,
-              "%s[ DEVICE = '%s' or BRIDGE = '%s' or MASTER = '%s'"
-              "    or MASTER = ../*[BRIDGE = '%s']/DEVICE ]/DEVICE",
-              ifcfg_path, nif->name, nif->name, nif->name, nif->name);
+    ndevs = aug_all_related_ifcfgs(ncf, &devs, nif->name);
     ERR_BAIL(ncf);
 
     nint = uniq_ifcfg_paths(ncf, ndevs, devs, &intf);
