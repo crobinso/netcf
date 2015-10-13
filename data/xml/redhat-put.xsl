@@ -135,7 +135,7 @@
   </xsl:template>
 
   <xsl:template name="bond-interface"
-                match="tree[node[@label = 'DEVICE'][@value = //tree/node[@label = 'MASTER']/@value]][count(node[@label = 'BRIDGE']) = 0]">
+                match="tree[count(node[@label = 'BONDING_OPTS']) or (node[@label = 'DEVICE'][@value = //tree/node[@label = 'MASTER']/@value])][count(node[@label = 'BRIDGE']) = 0]">
     <interface type="bond">
       <xsl:call-template name="name-attr"/>
       <xsl:call-template name="startmode"/>
