@@ -34,7 +34,6 @@ NETCF_CHECK_READLINE
 AC_CHECK_HEADER([pthread.h],
 	[AC_CHECK_LIB([pthread],[pthread_join],[
 		AC_DEFINE([HAVE_LIBPTHREAD],[],[Define if pthread (-lpthread)])
-		AC_DEFINE([HAVE_PTHREAD_H],[],[Define if <pthread.h>])
 		LIBS="-lpthread $LIBS"
 	])])
 
@@ -161,7 +160,7 @@ then
 				  [have_libnl_route3=no])
 	fi
 
-	if (test "${have_libnl3}" = "yes" -a "${have_libnl_route3}" = "yes"); then
+	if (test "${have_libnl3}" = "yes" && test "${have_libnl_route3}" = "yes"); then
             AC_DEFINE([HAVE_LIBNL3], [1], [Use libnl-3.0])
             have_libnl="yes"
             SAVE_CFLAGS="${CFLAGS}"

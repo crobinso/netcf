@@ -240,7 +240,7 @@ static bool is_slave(struct netcf *ncf, const char *intf) {
     ERR_BAIL(ncf);
 
     for (int i = 0 ; i < nslaves ; i++) {
-        if (strcmp(intf, slaves[i]) == 0) {
+        if (STREQ(intf, slaves[i])) {
             r = true;
             break;
         }
@@ -470,7 +470,7 @@ struct netcf_if *drv_lookup_by_name(struct netcf *ncf, const char *name) {
     ERR_BAIL(ncf);
 
     for (int i = 0 ; i < results ; i++) {
-        if (strcmp(names[i], name) == 0) {
+        if (STREQ(names[i], name)) {
             found = 1;
             break;
         }

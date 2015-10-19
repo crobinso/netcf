@@ -1,7 +1,7 @@
 /*
  * dutil_posix.c: *NIX utility functions for driver backends.
  *
- * Copyright (C) 2009-2012 Red Hat Inc.
+ * Copyright (C) 2009-2012, 2015 Red Hat Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,10 +31,8 @@
 #include <ctype.h>
 #include <errno.h>
 
-#include <dirent.h>
 #include <sys/wait.h>
 #include <signal.h>
-#include <c-ctype.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>

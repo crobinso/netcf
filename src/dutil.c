@@ -135,7 +135,7 @@ argv_to_string(const char *const *argv) {
  *
  * See parse_name in the augeas source for the gory details
  */
-static const char const name_escape[] = "][|/=()!," "\\ ";
+static char const name_escape[] = "][|/=()!," "\\ ";
 
 /* a local equivalent to augeas' aug_escape_name() API, for those
  * times when it isn't available.

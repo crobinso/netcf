@@ -118,7 +118,7 @@ void CuAssertStrEquals_LineMsg(CuTest* tc, const char* file, int line,
 
 	if ((expected == NULL && actual == NULL) ||
 	    (expected != NULL && actual != NULL &&
-	     strcmp(expected, actual) == 0))
+	     STREQ(expected, actual)))
         {
             return;
         }

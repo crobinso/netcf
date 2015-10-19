@@ -59,12 +59,12 @@ xmlNodePtr xml_next_element(xmlNodePtr n);
 /* Check that the nodes N1 and N2 are alike (including their children) */
 int xml_nodes_equal(xmlNodePtr n1, xmlNodePtr n2, char **err);
 
-/* Assert the the EXP (expected) and ACT (actual) XML text blobs are alike.
+/* Assert the EXP (expected) and ACT (actual) XML text blobs are alike.
  * FNAME is used for error reporting in the case that they are not alike. */
 void assert_xml_equals(CuTest *tc, const char *fname,
                        char *exp, char *act);
 
-/* Run command formed by FORMAT, raise an error if the the command did not
+/* Run command formed by FORMAT, raise an error if the command did not
  * exit with status 0 */
 void run(CuTest *tc, const char *format, ...);
 

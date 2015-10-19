@@ -226,7 +226,7 @@ find_ifcfg_files(struct netcf *ncf, char ***intf)
     struct dirent *ent;
     const char *ifprefix = "ifcfg-";
     const char *ifdir = network_scripts_path;
-    int count = 0, result =0, r =0;;
+    int count = 0, result =0, r =0;
 
     dp = opendir (ifdir);
     ERR_COND_BAIL(dp == NULL, ncf, EOTHER);

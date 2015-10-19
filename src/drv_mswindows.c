@@ -143,7 +143,7 @@ struct netcf_if *drv_lookup_by_name(struct netcf *ncf, const char *name) {
             r = WideCharToMultiByte(CP_UTF8, 0, adapter->FriendlyName,
                                     -1, wName, sizeof(wName), NULL, NULL);
             ERR_NOMEM(r == 0, ncf);
-            if(strcmp(name,wName) == 0) {
+            if(STREQ(name,wName)) {
                 nameDup = strdup(wName);
                 ERR_NOMEM(nameDup == NULL, ncf);
                 nif = make_netcf_if(ncf, nameDup);
@@ -186,7 +186,7 @@ const char *drv_mac_string(struct netcf_if *nif) {
         r = WideCharToMultiByte(CP_UTF8, 0, adapter->FriendlyName,
                                 -1, wName, sizeof(wName), NULL, NULL);
         ERR_NOMEM(r == 0, ncf);
-        if(strcmp(nif->name, wName) == 0) {
+        if(STREQ(nif->name, wName)) {
             for(i = 0; i < adapter->PhysicalAddressLength; i++) {
                 if (i == 0) {
                     ERR_NOMEM(asprintf(&buf, "%.2X:", adapter->PhysicalAddress[i]) < 0, ncf);

@@ -36,7 +36,6 @@
 
 #include <dirent.h>
 #include <sys/wait.h>
-#include <signal.h>
 #include <c-ctype.h>
 #include <errno.h>
 #include <sys/types.h>
@@ -1128,7 +1127,7 @@ static void add_link_info(struct netcf *ncf,
     prop = xmlSetProp(link_node, BAD_CAST "state", BAD_CAST state);
     ERR_NOMEM(!prop, ncf);
 
-    if (!strcmp(state, "up")) {
+    if (STREQ(state, "up")) {
         FREE(path);
         xasprintf(&path, "/sys/class/net/%s/speed", ifname);
         ERR_NOMEM(path == NULL, ncf);

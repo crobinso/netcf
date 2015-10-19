@@ -44,7 +44,7 @@ static void die(const char *format, ...) {
     va_end(ap);
 
     cleanup();
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 int main(int argc, char **argv) {

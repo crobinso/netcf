@@ -36,6 +36,8 @@
 #include <stdbool.h>
 #include <locale.h>
 
+#define __EXIT_ARGERROR 2
+
 enum command_opt_tag {
     CMD_OPT_NONE,
     CMD_OPT_BOOL,
@@ -130,7 +132,7 @@ static const char *arg_value(const struct command *cmd, const char *name) {
     const char *result = param_value(cmd, name);
     if (result == NULL) {
         fprintf(stderr, "internal error: argument without value\n");
-        exit(2);
+        exit(__EXIT_ARGERROR);
     }
     return result;
 }
@@ -613,7 +615,7 @@ static int parseline(struct command *cmd, char *line) {
             if (nparam > 0) {
                 fprintf(stderr,
                     "internal error: mandatory argument after optional one\n");
-                exit(2);
+                exit(__EXIT_ARGERROR);
             }
             narg++;
         }

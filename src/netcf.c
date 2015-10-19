@@ -1,7 +1,7 @@
 /*
  * netcf.c: the public interface for netcf
  *
- * Copyright (C) 2009 Red Hat Inc.
+ * Copyright (C) 2009, 2015 Red Hat Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,14 +22,12 @@
 
 #include <config.h>
 
-#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#include <signal.h>
 #include <spawn.h>
 #include <errno.h>
 
