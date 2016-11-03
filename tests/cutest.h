@@ -119,11 +119,3 @@ void CuSuiteSummary(CuSuite* testSuite, char **summary);
 void CuSuiteDetails(CuSuite* testSuite, char **details);
 
 #endif /* CU_TEST_H */
-
-/*
- * Local variables:
- *  indent-tabs-mode: nil
- *  c-indent-level: 4
- *  c-basic-offset: 4
- * End:
- */

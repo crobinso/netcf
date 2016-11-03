@@ -887,12 +887,3 @@ int main(int argc, char **argv) {
 
     return r == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }
-
-/*
- * Local variables:
- *  indent-tabs-mode: nil
- *  c-indent-level: 4
- *  c-basic-offset: 4
- *  tab-width: 4
- * End:
- */

@@ -1249,12 +1249,4 @@ error:
     return;
 }
 
-/*
- * Local variables:
- *  indent-tabs-mode: nil
- *  c-indent-level: 4
- *  c-basic-offset: 4
- *  tab-width: 4
- * End:
- */
 /* vim: set ts=4 sw=4 et: */

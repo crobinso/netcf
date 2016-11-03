@@ -280,11 +280,3 @@ void CuSuiteDetails(CuSuite* testSuite, char **details) {
         free(s);
     }
 }
-
-/*
- * Local variables:
- *  indent-tabs-mode: nil
- *  c-indent-level: 4
- *  c-basic-offset: 4
- * End:
- */

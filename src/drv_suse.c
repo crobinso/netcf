@@ -1361,11 +1361,4 @@ int ncf_put_aug(struct netcf *ncf, const char *aug_xml, char **ncf_xml) {
     return drv_put_aug(ncf, aug_xml, ncf_xml);
 }
 
-/*
- * Local variables:
- *  indent-tabs-mode: nil
- *  c-indent-level: 4
- *  c-basic-offset: 4
- * End:
- */
 /* vim: set ts=4 sw=4 et: */

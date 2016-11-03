@@ -81,13 +81,3 @@ static int ref_make_ref(void *ptrptr, size_t size, size_t ref_ofs) {
 #define ref_pin(var)   (var)->ref = REF_MAX
 
 #endif
-
-
-/*
- * Local variables:
- *  indent-tabs-mode: nil
- *  c-indent-level: 4
- *  c-basic-offset: 4
- *  tab-width: 4
- * End:
- */

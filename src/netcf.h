@@ -233,13 +233,3 @@ int ncf_error(struct netcf *, const char **errmsg, const char **details);
 #endif
 
 #endif
-
-
-/*
- * Local variables:
- *  indent-tabs-mode: nil
- *  c-indent-level: 4
- *  c-basic-offset: 4
- *  tab-width: 4
- * End:
- */

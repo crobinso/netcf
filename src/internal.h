@@ -221,13 +221,3 @@ int ncf_get_aug(struct netcf *, const char *ncf_xml, char **aug_xml);
 /* Transform the Augeas XML AUG_XML into interface XML NCF_XML */
 int ncf_put_aug(struct netcf *, const char *aug_xml, char **ncf_xml);
 #endif
-
-
-/*
- * Local variables:
- *  indent-tabs-mode: nil
- *  c-indent-level: 4
- *  c-basic-offset: 4
- *  tab-width: 4
- * End:
- */
