@@ -35,6 +35,7 @@
 #include <string.h>
 #include <math.h>
 
+#include "internal.h"
 #include "cutest.h"
 
 
