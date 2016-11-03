@@ -314,18 +314,18 @@ xmlRelaxNGPtr rng_parse(struct netcf *ncf, const char *fname) {
 }
 
 void rng_validate(struct netcf *ncf, xmlDocPtr doc) {
-	xmlRelaxNGValidCtxtPtr ctxt;
-	int r;
+    xmlRelaxNGValidCtxtPtr ctxt;
+    int r;
 
-	ctxt = xmlRelaxNGNewValidCtxt(ncf->rng);
-	xmlRelaxNGSetValidErrors(ctxt, rng_error, rng_error, ncf);
+    ctxt = xmlRelaxNGNewValidCtxt(ncf->rng);
+    xmlRelaxNGSetValidErrors(ctxt, rng_error, rng_error, ncf);
 
     r = xmlRelaxNGValidateDoc(ctxt, doc);
     if (r != 0 && ncf->errcode == NETCF_NOERROR)
         report_error(ncf, NETCF_EXMLINVALID,
            "Interface definition fails to validate");
 
-	xmlRelaxNGFreeValidCtxt(ctxt);
+    xmlRelaxNGFreeValidCtxt(ctxt);
 }
 
 /* Called from SAX on parsing errors in the XML. */
@@ -421,7 +421,6 @@ xmlNodePtr xml_node(xmlDocPtr doc,
  *  indent-tabs-mode: nil
  *  c-indent-level: 4
  *  c-basic-offset: 4
- *  tab-width: 4
  * End:
  */
 /* vim: set ts=4 sw=4 et: */
