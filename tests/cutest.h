@@ -41,12 +41,12 @@ typedef void (*TestFunction)(CuTest *);
 
 struct CuTest
 {
-	const char* name;
-	TestFunction function;
-	int failed;
-	int ran;
-	const char* message;
-	jmp_buf *jumpBuf;
+    const char* name;
+    TestFunction function;
+    int failed;
+    int ran;
+    const char* message;
+    jmp_buf *jumpBuf;
 };
 
 void CuTestInit(CuTest* t, const char* name, TestFunction function);
@@ -57,20 +57,20 @@ void CuTestRun(CuTest* tc, TestFunction setup, TestFunction teardown);
 void CuFail_Line(CuTest* tc, const char* file, int line, const char* message2, const char* message);
 void CuAssert_Line(CuTest* tc, const char* file, int line, const char* message, int condition);
 void CuAssertStrEquals_LineMsg(CuTest* tc,
-	const char* file, int line, const char* message,
-	const char* expected, const char* actual);
+    const char* file, int line, const char* message,
+    const char* expected, const char* actual);
 void CuAssertIntEquals_LineMsg(CuTest* tc,
-	const char* file, int line, const char* message,
-	int expected, int actual);
+    const char* file, int line, const char* message,
+    int expected, int actual);
 void CuAssertDblEquals_LineMsg(CuTest* tc,
-	const char* file, int line, const char* message,
-	double expected, double actual, double delta);
+    const char* file, int line, const char* message,
+    double expected, double actual, double delta);
 void CuAssertPtrEquals_LineMsg(CuTest* tc,
-	const char* file, int line, const char* message,
-	const void* expected, const void* actual);
+    const char* file, int line, const char* message,
+    const void* expected, const void* actual);
 void CuAssertPtrNotEqual_LineMsg(CuTest* tc,
-	const char* file, int line, const char* message,
-	const void* expected, const void* actual);
+    const char* file, int line, const char* message,
+    const void* expected, const void* actual);
 
 /* public assert functions */
 
@@ -94,15 +94,15 @@ void CuAssertPtrNotEqual_LineMsg(CuTest* tc,
 
 /* CuSuite */
 
-#define MAX_TEST_CASES	1024
+#define MAX_TEST_CASES    1024
 
-#define SUITE_ADD_TEST(SUITE,TEST)	CuSuiteAdd(SUITE, CuTestNew(#TEST, TEST))
+#define SUITE_ADD_TEST(SUITE,TEST)    CuSuiteAdd(SUITE, CuTestNew(#TEST, TEST))
 
 typedef struct
 {
-	int count;
-	CuTest* list[MAX_TEST_CASES];
-	int failCount;
+    int count;
+    CuTest* list[MAX_TEST_CASES];
+    int failCount;
     TestFunction setup;
     TestFunction teardown;
 } CuSuite;
@@ -125,6 +125,5 @@ void CuSuiteDetails(CuSuite* testSuite, char **details);
  *  indent-tabs-mode: nil
  *  c-indent-level: 4
  *  c-basic-offset: 4
- *  tab-width: 4
  * End:
  */

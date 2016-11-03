@@ -298,9 +298,9 @@ error:
 }
 
 int drv_lookup_by_mac_string(struct netcf *ncf,
-			     const char *mac ATTRIBUTE_UNUSED,
+                             const char *mac ATTRIBUTE_UNUSED,
                              int maxifaces ATTRIBUTE_UNUSED,
-			     struct netcf_if **ifaces ATTRIBUTE_UNUSED)
+                             struct netcf_if **ifaces ATTRIBUTE_UNUSED)
 {
     int result = -1;
 

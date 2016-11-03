@@ -711,13 +711,13 @@ error:
  */
 static char *device_name_from_xml(struct netcf *ncf, xmlDocPtr ncf_xml) {
     xmlXPathContextPtr context = NULL;
-	xmlXPathObjectPtr obj = NULL;
+    xmlXPathObjectPtr obj = NULL;
     char *result = NULL;
 
-	context = xmlXPathNewContext(ncf_xml);
+    context = xmlXPathNewContext(ncf_xml);
     ERR_NOMEM(context == NULL, ncf);
 
-	obj = xmlXPathEvalExpression(BAD_CAST "string(/interface/@name)", context);
+    obj = xmlXPathEvalExpression(BAD_CAST "string(/interface/@name)", context);
     ERR_NOMEM(obj == NULL, ncf);
     assert(obj->type == XPATH_STRING);
 
@@ -823,9 +823,9 @@ static void rm_interface(struct netcf *ncf, const char *name) {
  */
 static void rm_all_interfaces(struct netcf *ncf, xmlDocPtr ncf_xml) {
     xmlXPathContextPtr context = NULL;
-	xmlXPathObjectPtr obj = NULL;
+    xmlXPathObjectPtr obj = NULL;
 
-	context = xmlXPathNewContext(ncf_xml);
+    context = xmlXPathNewContext(ncf_xml);
     ERR_NOMEM(context == NULL, ncf);
 
     obj = xmlXPathEvalExpression(BAD_CAST
@@ -841,7 +841,7 @@ static void rm_all_interfaces(struct netcf *ncf, xmlDocPtr ncf_xml) {
         rm_interface(ncf, (char *) name);
         xmlFree(name);
         ERR_BAIL(ncf);
-	}
+    }
  error:
     xmlXPathFreeObject(obj);
     xmlXPathFreeContext(context);
@@ -1190,7 +1190,6 @@ int ncf_put_aug(struct netcf *ncf, const char *aug_xml, char **ncf_xml) {
  *  indent-tabs-mode: nil
  *  c-indent-level: 4
  *  c-basic-offset: 4
- *  tab-width: 4
  * End:
  */
 /* vim: set ts=4 sw=4 et: */
