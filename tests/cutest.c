@@ -119,10 +119,9 @@ void CuAssertStrEquals_LineMsg(CuTest* tc, const char* file, int line,
 
     if ((expected == NULL && actual == NULL) ||
         (expected != NULL && actual != NULL &&
-         STREQ(expected, actual)))
-        {
-            return;
-        }
+         STREQ(expected, actual))) {
+        return;
+    }
 
     if (message != NULL) {
         asprintf_or_die(&string, "%s: expected <%s> but was <%s>", message,
@@ -200,21 +199,19 @@ void CuSuiteAdd(CuSuite* testSuite, CuTest *testCase) {
 
 void CuSuiteAddSuite(CuSuite* testSuite, CuSuite* testSuite2) {
     int i;
-    for (i = 0 ; i < testSuite2->count ; ++i)
-        {
-            CuTest* testCase = testSuite2->list[i];
-            CuSuiteAdd(testSuite, testCase);
-        }
+    for (i = 0 ; i < testSuite2->count ; ++i) {
+        CuTest* testCase = testSuite2->list[i];
+        CuSuiteAdd(testSuite, testCase);
+    }
 }
 
 void CuSuiteRun(CuSuite* testSuite) {
     int i;
-    for (i = 0 ; i < testSuite->count ; ++i)
-        {
-            CuTest* testCase = testSuite->list[i];
-            CuTestRun(testCase, testSuite->setup, testSuite->teardown);
-            if (testCase->failed) { testSuite->failCount += 1; }
-        }
+    for (i = 0 ; i < testSuite->count ; ++i) {
+        CuTest* testCase = testSuite->list[i];
+        CuTestRun(testCase, testSuite->setup, testSuite->teardown);
+        if (testCase->failed) { testSuite->failCount += 1; }
+    }
 }
 
 static void string_append(char **s, const char *p) {
@@ -230,11 +227,10 @@ static void string_append(char **s, const char *p) {
 void CuSuiteSummary(CuSuite* testSuite, char **summary) {
     int i;
 
-    for (i = 0 ; i < testSuite->count ; ++i)
-        {
-            CuTest* testCase = testSuite->list[i];
-            string_append(summary, testCase->failed ? "F" : ".");
-        }
+    for (i = 0 ; i < testSuite->count ; ++i) {
+        CuTest* testCase = testSuite->list[i];
+        string_append(summary, testCase->failed ? "F" : ".");
+    }
     string_append(summary, "\n\n");
 }
 
@@ -243,14 +239,13 @@ void CuSuiteDetails(CuSuite* testSuite, char **details) {
     int failCount = 0;
     char *s = NULL;
 
-    if (testSuite->failCount == 0)
-        {
-            int passCount = testSuite->count - testSuite->failCount;
-            const char* testWord = passCount == 1 ? "test" : "tests";
-            asprintf_or_die(&s, "OK (%d %s)\n", passCount, testWord);
-            string_append(details, s);
-            free(s);
-        } else {
+    if (testSuite->failCount == 0) {
+        int passCount = testSuite->count - testSuite->failCount;
+        const char* testWord = passCount == 1 ? "test" : "tests";
+        asprintf_or_die(&s, "OK (%d %s)\n", passCount, testWord);
+        string_append(details, s);
+        free(s);
+    } else {
         if (testSuite->failCount == 1)
             string_append(details, "There was 1 failure:\n");
         else {

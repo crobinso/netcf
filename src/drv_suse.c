@@ -601,18 +601,18 @@ static int aug_put_xml(struct netcf *ncf, xmlDocPtr xml) {
                 toplevel = 0;
             }
             if (STREQ(label, "DEVICE")) {
-        device = value;
+                device = value;
                 if(!strchr(value, '.') && !strncmp("eth", value, strlen("eth")))
                    ethphysical = 1;
                 xmlFree(label);
             } else if(STREQ(label, "HWADDR")) {
-        mac = value;
+                mac = value;
                 xmlFree(label);
-        //continue;
+                //continue;
             } else if(STREQ(label, "GATEWAY")) {
-        gateway = value;
+                gateway = value;
                 xmlFree(label);
-        //continue;
+                //continue;
             } else {
                 r = xasprintf(&lpath, "%s/%s", path, label);
                 ERR_NOMEM(r < 0, ncf);
