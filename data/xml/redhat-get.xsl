@@ -46,11 +46,22 @@
   </xsl:template>
 
   <xsl:template name="vlan-interface-common">
-    <xsl:variable name="iface" select="pathcomponent:escape(concat(vlan/interface/@name, '.', vlan/@tag))"/>
-
-    <xsl:attribute name="path">/files/etc/sysconfig/network-scripts/ifcfg-<xsl:value-of select="$iface"/></xsl:attribute>
-    <node label="DEVICE" value="{$iface}"/>
-    <node label="VLAN" value="yes"/>
+    <xsl:variable name="vlan-name" select="@name"/>
+      <xsl:choose>
+        <xsl:when test="contains($vlan-name, '.')">
+          <xsl:variable name="iface" select="pathcomponent:escape(concat(vlan/interface/@name, '.', vlan/@tag))"/>
+          <xsl:attribute name="path">/files/etc/sysconfig/network-scripts/ifcfg-<xsl:value-of select="$iface"/></xsl:attribute>
+          <node label="DEVICE" value="{$iface}"/>
+          <node label="VLAN" value="yes"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="iface" select="/interface/@name"/>
+          <xsl:attribute name="path">/files/etc/sysconfig/network-scripts/ifcfg-<xsl:value-of select="$iface"/></xsl:attribute>
+          <node label="DEVICE" value="{$iface}"/>
+          <node label="PHYSDEV" value="{vlan/interface/@name}"/>
+          <node label="VLAN" value="yes"/>
+        </xsl:otherwise>
+      </xsl:choose>
   </xsl:template>
 
   <xsl:template name='bare-vlan-interface'>

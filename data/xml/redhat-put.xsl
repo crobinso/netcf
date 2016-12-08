@@ -56,11 +56,22 @@
 
   <xsl:template name="vlan-device">
     <xsl:variable name="name" select="node[@label = 'DEVICE']/@value"/>
-    <xsl:variable name="device" select="substring-before($name, '.')"/>
-    <xsl:variable name="tag" select="substring-after($name, '.')"/>
-    <vlan tag="{$tag}">
-      <interface name="{$device}"/>
-    </vlan>
+    <xsl:choose>
+      <xsl:when test="contains($name, '.')">
+        <xsl:variable name="device" select="substring-before($name, '.')"/>
+        <xsl:variable name="tag" select="substring-after($name, '.')"/>
+        <vlan tag="{$tag}">
+          <interface name="{$device}"/>
+        </vlan>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="device" select="node[@label = 'PHYSDEV']/@value"/>
+        <xsl:variable name="tag" select="translate($name, translate($name, '0123456789', ''), '')"/>
+        <vlan tag="{$tag}">
+          <interface name="{$device}"/>
+        </vlan>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!--
