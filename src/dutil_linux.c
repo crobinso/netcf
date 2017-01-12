@@ -687,6 +687,7 @@ int netlink_init(struct netcf *ncf) {
         goto error;
     if (nl_connect(ncf->driver->nl_sock, NETLINK_ROUTE) < 0)
         goto error;
+    nl_socket_enable_msg_peek(ncf->driver->nl_sock);
 
     ncf->driver->link_cache = __rtnl_link_alloc_cache(ncf->driver->nl_sock);
     if (ncf->driver->link_cache == NULL)
