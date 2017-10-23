@@ -69,7 +69,7 @@ static void ipcalc_netmask(xmlXPathParserContextPtr ctxt, int nargs) {
 
     if (prefix == 0 || prefix > 32) {
         xsltTransformError(xsltXPathGetTransformContext(ctxt), NULL, NULL,
-                           "ipcalc:netmask: prefix %d not in the range 1 to 32", prefix);
+                           "ipcalc:netmask: prefix %lu not in the range 1 to 32", prefix);
         goto error;
     }
 
