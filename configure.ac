@@ -17,7 +17,17 @@ gl_EARLY
 AC_PROG_LIBTOOL
 
 dnl Compiler flags to be used everywhere
-AC_SUBST([NETCF_CFLAGS], ['--std=gnu99 -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fasynchronous-unwind-tables'])
+AC_SUBST([NETCF_CFLAGS], ['--std=gnu99 -fexceptions -fasynchronous-unwind-tables'])
+
+AC_DEFINE([lint], [1],
+  [Define to 1 if the compiler is checking for lint.])
+AH_VERBATIM([FORTIFY_SOURCE],
+[/* Enable compile-time and run-time bounds-checking, and some warnings,
+    without upsetting newer glibc. */
+ #if !defined _FORTIFY_SOURCE && defined __OPTIMIZE__ && __OPTIMIZE__
+ # define _FORTIFY_SOURCE 2
+ #endif
+])
 
 gl_INIT
 
