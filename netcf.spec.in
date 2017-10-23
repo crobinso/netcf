@@ -5,8 +5,8 @@ Summary:        Cross-platform network configuration library
 
 Group:          System Environment/Libraries
 License:        LGPLv2+
-URL:            https://fedorahosted.org/netcf/
-Source0:        https://fedorahosted.org/released/%{name}/%{name}-%{version}.tar.gz
+URL:            https://pagure.io/netcf/
+Source:         https://releases.pagure.org/netcf/%{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 # Patches

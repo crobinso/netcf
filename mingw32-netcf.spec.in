@@ -12,7 +12,7 @@ Summary:        MinGW network configuration library
 
 Group:          System Environment/Libraries
 License:        LGPLv2+
-URL:            https://fedorahosted.org/netcf/
+URL:            https://pagure.io/netcf/
 Source0:        http://astokes.fedorapeople.org/%{name}/netcf-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 

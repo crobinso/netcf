@@ -26,25 +26,19 @@ customary praise, I am particularly interested in reviews on the following:
 Where can I get it ?
 --------------------
 Main website
-  https://fedorahosted.org/netcf/
+  https://pagure.io/netcf
 
 A tarball can be downloaded from
-  https://fedorahosted.org/released/netcf/
+  https://releases.pagure.org/netcf/
 
 The git repo is at
-  http://git.fedorahosted.org/git/netcf.git
-  git clone git://git.fedorahosted.org/netcf.git
-
-For those running Fedora 10, I built some preliminary RPM's and made them
-available at
-  http://people.redhat.com/dlutter/netcf/download/
-
-(and if you are a Fedora reviewer, the review BZ is 493750 ;)
+  https://pagure.io/netcf.git
+  git clone https://pagure.io/netcf.git
 
 How can I help ?
 ----------------
 Join the mailing list at
-  https://fedorahosted.org/mailman/listinfo/netcf-devel
+  https://lists.fedorahosted.org/admin/lists/netcf-devel.lists.fedorahosted.org/
 
 Currently, netcf can set up simple Ethernet interfaces, bridges with
 enslaved physical devices and bonds on Fedora. This points to two areas

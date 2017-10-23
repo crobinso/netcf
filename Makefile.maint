@@ -7,7 +7,7 @@ include Makefile
 
 rpmbuild_dir=/data/rpmbuild/$(PACKAGE_NAME)-$(PACKAGE_VERSION)
 rpb_spec=$(rpmbuild_dir)/netcf.spec
-rel_dir=fedorahosted.org:netcf
+rel_dir=pagure.io:netcf
 
 tarball=$(PACKAGE_NAME)-$(PACKAGE_VERSION).tar.gz
 
