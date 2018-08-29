@@ -93,7 +93,7 @@ struct command_opt {
 
 /* Global variables */
 
-static const struct command_def const *commands[];
+static const struct command_def *const commands[];
 
 struct netcf *ncf;
 static const char *const progname = "ncftool";
@@ -673,7 +673,7 @@ static int parseline(struct command *cmd, char *line) {
     return 0;
 }
 
-static const struct command_def const *commands[] = {
+static const struct command_def *const commands[] = {
     &cmd_list_def,
     &cmd_dump_xml_def,
     &cmd_define_def,
