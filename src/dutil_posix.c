@@ -220,7 +220,7 @@ int run_program(struct netcf *ncf, const char *const *argv, char **output)
     fclose(outfile);
     outfile = NULL;
 
-    while ((waitret = waitpid(childpid, &exitstatus, 0) == -1) &&
+    while ((waitret = waitpid(childpid, &exitstatus, 0)) == -1 &&
            errno == EINTR) {
         /* empty loop */
     }
