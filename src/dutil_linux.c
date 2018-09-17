@@ -399,7 +399,7 @@ void free_matches(int nint, char ***intf) {
 /* Returns a list of all interfaces with MAC address MAC */
 int aug_match_mac(struct netcf *ncf, const char *mac, char ***matches) {
     int nmatches;
-    char *path = NULL, *mac_lower = NULL;
+    char *mac_lower = NULL;
 
     mac_lower = strdup(mac);
     ERR_NOMEM(mac_lower == NULL, ncf);
@@ -428,7 +428,6 @@ int aug_match_mac(struct netcf *ncf, const char *mac, char ***matches) {
 
  error:
     FREE(mac_lower);
-    FREE(path);
     return -1;
 }
 
