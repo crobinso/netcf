@@ -655,9 +655,12 @@ static int parseline(struct command *cmd, char *line) {
             }
             for (def = cmd->def->opts;
                  def->name != NULL && !opt_def_is_arg(def);
-                 def++);
-            for (int i=0; i < curarg; i++)
-                for (; def->name != NULL && !opt_def_is_arg(def); def++);
+                 def++) {
+            }
+            for (int i=0; i < curarg; i++) {
+                for (; def->name != NULL && !opt_def_is_arg(def); def++) {
+                }
+            }
             struct command_opt *opt =
                 make_command_opt(cmd, def);
             opt->string = tok;
