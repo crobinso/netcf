@@ -423,6 +423,7 @@ int aug_match_mac(struct netcf *ncf, const char *mac, char ***matches) {
         (*matches)[i] = n;
     }
 
+    FREE(mac_lower);
     return nmatches;
 
  error:
