@@ -504,6 +504,7 @@ struct netcf_if *drv_lookup_by_name(struct netcf *ncf, const char *name) {
     goto done;
 
  error:
+    /* coverity[overwrite_var] */
     unref(nif, netcf_if);
     FREE(name_dup);
  done:
